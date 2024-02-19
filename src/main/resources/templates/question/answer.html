@@ -1,0 +1,142 @@
+<th:block th:replace="~{layout/header :: setContent(~{this::content} )}"
+          xmlns="http://www.w3.org/1999/html"
+          xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+    <th:block th:fragment="content">
+        <div class="hero page-inner overlay" style="background-image: url('/images/hero_bg_1.jpg')">
+            <div class="container">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-lg-9 text-center mt-5-q"> <!-- mt-5-q : header 글 밑 패딩 추가-->
+                        <h1 class="heading" data-aos="fade-up">QnA</h1>
+                        <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+                            <ol class="breadcrumb text-center justify-content-center">
+                                <li class="breadcrumb-item"><a th:href="@{/index}">Home</a></li>
+                                <li class="breadcrumb-item active text-white-50" aria-current="page">QnA</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="row mt-3">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body"></div>
+                                <div class="container my-3" style="padding-left: 45px; padding-right: 45px; text-align: justify;">
+                                    <!-- 질문 제목 -->
+                                    <div style="display: inline-block; width: 48%; text-align: left;">
+                                        <h4 class="py-2" th:text="${question.qtitle}"></h4>
+                                    </div>
+                                    <!-- 질문 카테고리 -->
+                                    <div style="display: inline-block; width: 48%; text-align: right;">
+                                        <h5 class="py-2" th:text="${question.qcate}"></h5>
+                                    </div>
+                                    <div class="card my-3"></div>
+                                </div>
+                                <!-- 질문 내용 및 시간-->
+                                <div class="card-body" style="padding-left: 60px; padding-right: 60px;">
+                                    <!-- <link rel="stylesheet" type="text/css" th:href="@{/style.css}">&lt;!&ndash;답변창커짐&ndash;&gt;-->
+                                    <div th:text="${question.qcontent}"></div>
+                                    <div class="d-flex justify-content-end"> <!--시간위치(오른쪽정렬)-->
+                                        <div class="badge bg-light text-dark p-2 text-start"><!--시간테두리-->
+                                            <div class="mb-2"><!--작성자표시-->
+                                                <span th:if="${dto.member != null}" th:text="${dto.member.mid}"></span>
+                                            </div>
+                                            <div th:text="${#temporals.format(question.regDate, 'yyyy-MM-dd HH:mm')}"></div>
+                                            <br>
+                                            <!-- 수정 버튼과 삭제 버튼은 작성자 본인에게만 허용 -->
+                                            <th:block th:if="${question.member != null and #authentication.getPrincipal().getMid() == question.member.mid}">
+                                                <a th:href="@{/question/modify(qno=${dto.qno})}"
+                                                   class="text-decoration-none" sec:authorize="isAuthenticated()">
+                                                    <button type="button" class="bi bi-pencil-square" style="cursor: pointer; border: none;"></button>
+                                                </a>
+                                                <form th:action="@{/question/remove}" method="post" style="display: inline;">
+                                                    <input type="hidden" name="qno" th:value="${dto.qno}"/>
+                                                    <button type="submit" class="bi bi-trash-fill" style="cursor: pointer; border: none;"></button>
+                                                </form>
+                                            </th:block>
+                                        </div>
+                                    </div>
+
+                                    <h5 class="border-bottom my-3 py-2"
+                                        th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>
+                                    <div class="card my-3" th:each="answer : ${question.answerList}">
+                                        <div class="card-body">
+                                            <div class="card-text" style="white-space: normal;" th:text="${answer.acontent}"></div>
+                                            <div class="d-flex justify-content-end">
+                                                <div class="badge bg-light text-dark p-2 text-start">
+                                                    <div class="mb-2"><!--작성자표시-->
+                                                        <span th:if="${answer.member != null}"
+                                                              th:text="${answer.member.mid}">
+                                                        </span>
+                                                    </div>
+                                                    <div th:text="${#temporals.format(answer.regDate, 'yyyy-MM-dd HH:mm')}"></div>
+                                                </div>
+                                            </div>
+                                        </div><!-- end card-body-->
+                                    </div><!--end card my-3-->
+                                </div><!--end card-body-->
+                            </div><!--end card-->
+                        </div><!--end card-body-->
+                        <!--목록,수정,답변버튼-->
+                        <div class="my-4">
+                            <!--<span th:text="${pageRequestedDTO?.getLink()}"></span>-->
+                            <a th:href="@{/question/qna}" class="text-decoration-none">
+                                <button type="button" class="btn btn-outline-success">목록</button>
+                            </a>
+                            </span><!--end class="float-end" -->
+                        </div><!--end class="my-4"-->
+                    </div>
+                </div><!--end col-->
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script th:inline="javascript">
+            //수정버튼 누를 시 에러처리 부분
+            const errors = [[${errors}]]
+            console.log(errors)
+
+            let errorMsg = ''
+
+            if (errors) {
+                for (let i = 0; i < errors.length; i++) {
+                    errorMsg += `${errors[i].field}은(는) ${errors[i].code} \n`
+                }
+                history.replaceState({}, null, null)
+                alert(errorMsg)
+            }
+            //수정시이벤트처리(정상처리시 목록으로 이동)
+            const formObj = document.querySelector("#f1")
+
+            document.querySelector(".modBtn").addEventListener("click", function (e) {
+                e.preventDefault()
+                e.stopPropagation()
+
+                formObj.action = `/answer/modify?${link}`
+                formObj.method = 'post'
+                formObj.submit()
+            }, false)
+
+            //삭제버튼 누를 시 삭제처리
+            document.querySelector(".deleteBtn").addEventListener("click", function (e) {
+                e.preventDefault()
+                e.stopPropagation()
+                formObj.action = `/answer/list`
+                formObj.method = 'post'
+                formObj.submit()
+            }, false)
+
+            //목록으로 이동하는 버튼의 이벤트처리
+            document.querySelector(".list2Btn").addEventListener("click", function (e) {
+                e.preventDefault()
+                e.stopPropagation()
+                formObj.reset()
+                formObj.action = `/answer/list`
+            }, false)
+        </script>
+    </th:block>
+</th:block>

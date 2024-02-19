@@ -1,0 +1,298 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<th:block th:replace="~{layout/header :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <style>
+            button {
+                text-decoration: none;
+                position: relative;
+                display: inline-block;
+                width: 80px;
+                height: 80px;
+                color: #fff;
+                background: #00204a;
+                border-radius: 50%;
+                -webkit-transition: .3s all ease;
+                -o-transition: .3s all ease;
+                transition: .3s all ease;
+                border: 2px solid transparent;
+                position: relative;
+                top: 0;
+            }
+
+            .social a {
+                text-decoration: none;
+                position: relative;
+                display: inline-block;
+                width: 80px;
+                height: 80px;
+                color: #fff;
+                background: #00204a;
+                border-radius: 50%;
+                -webkit-transition: .3s all ease;
+                -o-transition: .3s all ease;
+                transition: .3s all ease;
+                border: 2px solid transparent;
+                position: relative;
+                top: 0;
+            }
+
+            .heading {
+                color: #A9A9A9; /* 연한 회색 색상 코드 */
+            }
+
+            .separator {
+                height: 1px;
+                background-color: #d3d3d3;
+                margin: 10px 0; /* 원하는 간격 설정 */
+
+            }
+            .heading {
+                white-space: pre-line;
+            }
+        </style>
+        <!-- 사용자 스크립트 추가 -->
+        <th:block layout:fragment="script">
+            <script th:inline="javascript">
+                $(document).ready(function () {
+
+                    calculateTotalPrice();
+
+                    $("#count").change(function () {
+                        calculateTotalPrice();
+                    });
+                });
+
+                function order() {
+
+                    var username = [[${mdto.mid}]];
+                    var userRole = [[${userRole}]];
+                    var itemStatus = document.getElementById('itemStatus').value;
+
+                    if (username == null) {
+                        alert('로그인 후 이용해주세요');
+                        location.href = '/member/login';
+                    }
+
+                    if (itemStatus === 'SOLD_OUT') {
+                        alert('품절 상품입니다!');
+                        return;
+                    }
+
+                    if (userRole === 'ADMIN') {
+                        alert('권한이 없습니다!');
+                        return;
+                    }
+
+                    var itemId = $("#itemId").val();
+                    var count = $("#count").val();
+
+                    var priceString = $("#price").text();
+                    var price = parseInt(priceString.replace(/[^\d]/g, ''), 10); // 숫자만 남기고 나머지 제거
+
+                    var itemNm = $("#itemNm").text();
+
+                    var postData = {
+                        itemId: itemId,
+                        count: count,
+                        price: price,
+                        itemNm: itemNm
+                    };
+                    console.log('Order function called');
+                    // 주문 페이지로 이동
+                    window.location.href = "/detail/checkout?orderData=" + encodeURIComponent(JSON.stringify(postData));
+                }
+
+                function addCart() {
+
+                    var username = [[${mdto.mid}]];
+                    var userRole = [[${userRole}]];
+                    var itemStatus = document.getElementById('itemStatus').value;
+
+                    console.log(itemStatus);
+
+                    if (itemStatus === 'SOLD_OUT') {
+                        alert('품절 상품입니다!');
+                        return;
+                    }
+
+                    if (userRole === 'ADMIN') {
+                        alert('권한이 없습니다!');
+                        return;
+                    }
+
+                    var url = "/cart";
+                    var paramData = {
+                        itemId: $("#itemId").val(),
+                        count: $("#count").val()
+                    };
+
+                    var param = JSON.stringify(paramData);
+
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        contentType: "application/json",
+                        data: param,
+                        dataType: "json",
+                        cache: false,
+                        success: function (result, status) {
+                            alert("상품을 장바구니에 담았습니다.");
+                            location.href = '/cart';
+                        },
+                        error: function (jqXHR, status, error) {
+
+                            if (username == null) {
+                                alert('로그인 후 이용해주세요');
+                                location.href = '/member/login';
+                            } else {
+                                alert(jqXHR.responseText);
+                            }
+
+                        }
+                    });
+
+                    console.log('Cart function called');
+                }
+
+            </script>
+        </th:block>
+        <div
+                class="hero page-inner overlay"
+                style="background-image: url('images/hero_bg_3.jpg')"
+        >
+            <div class="container">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-lg-9 text-center mt-5">
+                        <h1 class="heading" data-aos="fade-up">
+                            나무 중고물품
+                        </h1>
+
+                        <nav
+                                aria-label="breadcrumb"
+                                data-aos="fade-up"
+                                data-aos-delay="200"
+                        >
+                            <ol class="breadcrumb text-center justify-content-center">
+                                <li class="breadcrumb-item"><a th:href="@{/index}">Home</a></li>
+                                <li class="breadcrumb-item">
+                                    <a th:href="@{/properties}">목록</a>
+                                </li>
+                                <li
+                                        class="breadcrumb-item active text-white-50"
+                                        aria-current="page"
+                                >
+                                    5232 California AVE. 21BC
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="container">
+                <div class="row justify-content-between">
+                    <div class="col-lg-7">
+                        <div class="img-property-slide-wrap">
+                            <div class="img-property-slide" th:each="itemImage: ${dto.imageDTOList}" th:data-file="${itemImage.getThumbnailURL()}">
+                                <img th:if="${itemImage.path != null}" th:src="|/display?fileName=${itemImage.getThumbnailURL()}|" alt="Image" class="img-fluid" />
+                                <!--                <img src="images/img_2.jpg" alt="Image" class="img-fluid" />-->
+                                <!--                <img src="images/img_3.jpg" alt="Image" class="img-fluid" />-->
+                            </div>
+                        </div>
+                    </div>
+                    <form th:action="@{/article}" th:method="post">
+                        <div class="col-lg-4">
+                            <div class="separator"></div>
+                            <h2 class="heading text-primary" th:text="${dto.iname}"> </h2>
+                            <link rel="stylesheet" href="styles.css"> <!-- styles.css에 위에서 작성한 CSS 코드를 저장하고 파일 경로를 여기에 적용 -->
+                            <h6 class="heading text-primary" >[[${dto.icategory}]] </h6>
+                            <h2 class="heading text-primary">[[${dto.iprice}]]원</h2><br></br>
+
+                            <h4 class="heading text-primary">[[${dto.idescription}]]&nbsp;</h4>
+
+                            </p>
+                            <br></br>
+                            <h6 class="heading text-primary">[[${dto.idealway}]]</h6>
+
+                            <div class="separator"></div>
+
+                            <!-- 글을 올린 사용자의 ID 표시 -->
+<!--                            <p class="text-black-50" th:text="'작성자: ' + ${dto.mid}"></p>-->
+                            <input type="hidden" name="mid" th:value="${mdto.mid}">
+                            <input type="hidden" name="ino" id="itemId" th:value="${dto.ino}">
+                            <input type="hidden" th:id="itemNm" th:value="${dto.iname}">
+                            <input style="white-space: pre-line;" type="hidden" th:id="idescription" th:value="${dto.idescription}">
+                            <input type="hidden" name="totalPrice" id="price" th:value="${dto.iprice}">
+                            <input type="hidden" id="itemStatus" th:value="${dto.isaleStatus}" class="text-right">
+                            <input type="hidden" id="idealway" th:value="${dto.idealway}" class="text-right">
+                            <input type="hidden" name="count" th:id="count" class="div-pro-qty" value="1" min="1">
+
+                            <div class="d-block agent-box p-5">
+                                <div class="img mb-4">
+                                    <img
+                                            th:src="@{/assets/images/faces/anonymous.jpg}"
+                                            alt="Image"
+                                            class="img-fluid"
+                                    />
+                                </div>
+                                <div class="text">
+                                    <h3 class="mb-0">[[${sdto.mname}]]</h3>
+
+                                    <div class="meta mb-3">[[${sdto.mid}]]</div>
+                                    <p>
+                                        [[${sdto.memail}]]
+                                    </p>
+                                    <ul class="list-unstyled social dark-hover d-flex">
+                                        <!--                  <li class="me-1">-->
+                                        <!--                    <button type="button" onclick="addCart()">카트</button>-->
+                                        <!--                  </li>-->
+                                        <!--                  <li class="me-1">-->
+                                        <!--                    <button type="button" onclick="order()">결제</button>-->
+                                        <!--                  </li>-->
+                                        <!--                  <li class="me-1">-->
+                                        <!--                    <button type="button" th:onclick="|window.location.href='/article?ino+'|">찐결제</button>-->
+                                        <!--                  </li>-->
+
+                                        <li class="me-1">
+                                            <a><span>
+                                            <button type="submit">결 제</button>
+                                            </span></a>
+                                        </li>
+
+                                        <!--                  <li class="me-1">-->
+                                        <!--                    <a th:href="@{/cart}" onclick="addCart()"><span>카트</span></a>-->
+                                        <!--                  </li>-->
+                                        <!--                  <li class="me-1">-->
+                                        <!--                    <a th:href="@{/article(ino = ${dto.ino})}"><span>결제</span></a>-->
+                                        <!--                  </li>-->
+                                        <li class="me-1">
+                                            <a th:href="@{/chat/chatList}"><span>채 팅</span></a>
+                                        </li>
+                                        <li class="me-1">
+                                            <a th:href="@{https://instagram.com}"><span class="icon-instagram"></span></a>
+                                        </li>
+                                        <li class="me-1">
+                                            <a th:href="@{https://twitter.com}"><span class="icon-twitter"></span></a>
+                                        </li>
+<!--                                        <li class="me-1">-->
+<!--                                            <a href="#"><span class="icon-facebook"></span></a>-->
+<!--                                        </li>-->
+<!--                                        <li class="me-1">-->
+<!--                                            <a href="#"><span class="icon-linkedin"></span></a>-->
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </th:block>
+</th:block>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
+<head>
+    <title>1:1QnA(user)</title>
+</head>
+<div layout:fragment="content">
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    1:1QnA(답변)
+                </div><!--end card-header-->
+                <div class="container my-3">
+                    <!-- 질문 제목-->
+                    <h4 class="py-2" th:text="${question.qtitle} "></h4>
+                    <div class="card my-3"><!--질문제목배경색(화이트)-->
+                    </div><!--end card my-3(질문제목배경색)-->
+                </div><!-- end container my-3-->
+                <!-- 질문 내용 및 시간-->
+                <div class="card-body">
+                    <!-- <link rel="stylesheet" type="text/css" th:href="@{/style.css}">&lt;!&ndash;답변창커짐&ndash;&gt;-->
+                    <div th:text="${question.qcontent}"></div>
+                    <div class="d-flex justify-content-end"> <!--시간위치(오른쪽정렬)-->
+                        <div class="badge bg-light text-dark p-2 text-start"><!--시간테두리-->
+                            <div th:text="${#temporals.format(question.regDate, 'yyyy-MM-dd HH:mm')}"></div>
+                        </div><!--시간테두리 끝-->
+                    </div><!--시간위치(오른쪽정렬)-->
+                    <!-- 답변의 갯수 표시 -->
+                    <h5 class="border-bottom my-3 py-2"
+                        th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>
+                    <!-- <h5 th:text="|${#lists.size(question.answerList)}개의 답변을 등록했습니다.|"></h5>-->
+                    <!-- 답변 반복 시작 --><!--답변들 칸이 나눠짐-->
+                    <div class="card my-3" th:each="answer : ${question.answerList}">
+                        <div class="card-body">
+                            <div class="card-text" style="white-space: normal;" th:text="${answer.acontent}"></div>
+                            <div class="d-flex justify-content-end">
+                                <div class="badge bg-light text-dark p-2 text-start">
+                                    <div th:text="${#temporals.format(answer.regDate, 'yyyy-MM-dd HH:mm')}"></div>
+                                    <div class="my-3">
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- end card-body-->
+                    </div><!--end card my-3-->
+
+                </div><!--end card-body-->
+                <!--목록,수정,답변버튼-->
+                <div class="my-4">
+                    <span th:text="${pageRequestedDTO?.getLink()}"></span>
+                        <a th:href="|@{/question/list3}?${link}|" class="text-decoration-none">
+                            <button type="button" class="btn btn-outline-success">목록</button>
+                        </a>
+                    </span><!--end class="float-end" -->
+                </div><!--end class="my-4"-->
+
+            </div><!--end card-->
+        </div><!--end col-->
+    </div><!--end row mt-3-->
+</div><!--end fragment="content"-->
+
+<script layout:fragment="script" th:inline="javascript">
+
+    //수정버튼 누를 시 에러처리 부분
+    const errors = [[${errors}]]
+    console.log(errors)
+
+    let errorMsg = ''
+
+    if(errors){
+        for(let i = 0; i < errors.length; i++){
+            errorMsg += `${errors[i].field}은(는) ${errors[i].code} \n`
+        }
+        history.replaceState({}, null, null)
+        alert(errorMsg)
+    }
+    //수정시이벤트처리(정상처리시 목록으로 이동)
+    const link = [[${pageRequestedDTO.getLink()}]]
+    const formObj = document.querySelector("#f1")
+
+    document.querySelector(".modBtn").addEventListener("click", function (e){
+        e.preventDefault()
+        e.stopPropagation()
+
+        formObj.action = `/answer/modify?${link}`
+        formObj.method = 'post'
+        formObj.submit()
+    }, false)
+    //삭제버튼 누를 시 삭제처리
+    document.querySelector(".deleteBtn").addEventListener("click", function (e){
+        e.preventDefault()
+        e.stopPropagation()
+        formObj.action = `/answer/list2`
+        formObj.method = 'post'
+        formObj.submit()
+    }, false)
+    //목록으로 이동하는 버튼의 이벤트처리
+    document.querySelector(".list2Btn").addEventListener("click", function (e){
+        e.preventDefault()
+        e.stopPropagation()
+        formObj.reset()
+        formObj.action = `/answer/list2?${link}`
+
+    }, false)
+</script>
+
+</html>
