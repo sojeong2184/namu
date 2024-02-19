@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{layout_admin/header :: setContent(~{this::content} )}">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Chatbox - Mazer Admin Dashboard</title>
+  </head>
+
+  <th:block th:fragment="content">
+    <div id="app">
+      <div id="main">
+        <header class="mb-3">
+          <a href="#" class="burger-btn d-block d-xl-none">
+            <i class="bi bi-justify fs-3"></i>
+          </a>
+        </header>
+        <div class="page-heading">
+          <section class="section">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="media d-flex align-items-center">
+                      <div class="avatar me-3">
+                        <img th:src="@{/assets/images/faces/1.jpg}" alt="" srcset="">
+                        <span class="avatar-status bg-success"></span>
+                      </div>
+                      <div class="name flex-grow-1">
+                        <h6 class="mb-0" th:text="${member.mname}"></h6>
+                        <span class="text-xs">Online</span>
+                      </div>
+                      <div class="btn btn-sm">
+                        <button data-feather="x" onclick="quit()">X</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 채팅 부분 -->
+                  <div id="chatArea" >
+                    <div class="msgArea" id="chatMessageArea"
+                         style="height: 700px; overflow:scroll"></div>
+                  </div>
+                  <div class="card-footer">
+                    <div class="message-form d-flex flex-direction-column align-items-center">
+                      <a href="http://" class="black"><i data-feather="smile"></i></a>
+                      <div class="d-flex flex-grow-1 ml-4">
+                        <input type="text" class="form-control"
+                               placeholder="Type your message..">
+                        <div class="buttons-chat">
+                          <button type="button" class="btn btn-primary" onclick="sendMsg()">
+                            SEND
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- jQuery 추가 -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script th:inline="javascript">
+
+      let socket = new WebSocket("ws://localhost:80/ws/chat");
+
+      function enterRoom(socket) {
+        var enterMsg = {"type": "ENTER", "roomId": [[${room.roomId}]], "sender": "chee", "msg": ""}; //sender는  글쓸때 수정하자.
+
+        socket.send(JSON.stringify(enterMsg));
+      }
+
+      socket.onopen = function (e) {
+        console.log('open server!');
+        setTimeout(function (){
+          enterRoom(socket);
+        }, 1000); //적절한 대기 시간 설정
+      };
+
+      socket.onclose = function (e) {
+        console.log('disconnet');
+      }
+
+      socket.onerror = function (e) {
+        console.log(e);
+      }
+
+      //메세지 수신했을 때 이벤트.
+      socket.onmessage = function (e) {
+
+        console.log(e.data);
+
+        //새로운 메시지가 도착했을 때
+        appendMessage(e.data);
+
+        let msgArea = document.querySelector('.msgArea');
+
+        //메세지 새로 생성 <div>
+        let newMsg = document.createElement('div');
+        newMsg.innerText = e.data;
+
+        //style="display:none"
+        newMsg.style.display = 'none';
+
+        msgArea.append(newMsg);
+
+        clearMsgArea();
+      }
+
+      //보냈던 메세지는 지워짐
+      function clearMsgArea(){
+        $('div.card-footer input').val('');
+      }
+
+      //메세지 보내기 버튼 눌렀을 떄..
+      function sendMsg() {
+        let content = document.querySelector('.form-control').value;
+        var talkMsg = {
+          "type"  : "TALK",
+          "roomId": [[${room.roomId}]],
+          "sender": [[${member.mname}]],
+          "msg"   : content,
+          "isSent": true //보낸 메세지인 경우 true, 받은 메세지인 경우 false
+        };
+        socket.send(JSON.stringify(talkMsg));
+      }
+
+      // 엔터 키에 대한 이벤트 핸들러
+      function handleEnterKey(e) {
+        if (e.keyCode === 13 && !e.shiftKey) {
+          e.preventDefault();
+          sendMsg(); // Enter 키가 눌리면 sendMsg 함수 호출
+          clearMsgArea(); // 메세지 전송 후 입력창 비우기
+        }
+      }
+
+      function quit() {
+        var quitMsg = {"type": "QUIT", "roomId": [[${room.roomId}]], "sender": "chee", "msg": ""};
+        socket.send(JSON.stringify(quitMsg));
+        socket.close();
+        location.href = "/mypage/chat/chatList";
+      }
+
+      //말풍선 style
+      function appendMessage(msg) {
+
+        if (msg == '') {
+          return false;
+        } else {
+          var message = JSON.parse(msg);
+          var messageType = message.isSent ? 'sent' : 'received';
+
+          $("#chatMessageArea").append(
+                  "<div class='card-body pt-4 bg-grey'>" +
+                  "<div class='chat-content'>" +
+                  "<div class='chat " + (message.isSent ? '' : 'chat-left') +"' data-message-type='" + messageType + "'>" +
+                  "<div class='chat-body'>" +
+                  "<div class='chat-message'>" + message.msg + "</div>" +
+                  "</div>" +
+                  "</div>" +
+                  "</div>" +
+                  "</div>")
+
+          // 마지막으로 추가된 메시지가 화면에 표시되도록 스크롤을 아래로 이동
+          var chatMessageArea = $("#chatMessageArea");
+          chatMessageArea.scrollTop(chatMessageArea.prop("scrollHeight"));
+
+          // 입력창에 포커스를 설정
+          $("#chatMessageArea .form-control").focus();
+        }
+      }
+
+      // 입력창에 대한 이벤트 핸들러 등록
+      document.querySelector('.form-control').addEventListener('keydown', handleEnterKey);
+    </script>
+  </th:block>
+</th:block>
+</html>
