@@ -1,0 +1,228 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<th:block th:replace="~{layout/header :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+        <div class="hero page-inner overlay" style="background-image: url('images/hero_bg_3.jpg')">
+        </div>
+        <!-- Groups section start -->
+        <section id="groups">
+            <div class="row match-height">
+                <div class="col-12 mt-3 mb-1">
+                    <h4 class="section-title text-uppercase">중고 카트</h4>
+                </div>
+                <div class="row-cell-checkall2"><input class="row-cell-checkall" type="checkbox" id="checkall"
+                                                       onclick="checkAll()">전체 선택
+                </div>
+            </div>
+            <div class="row match-height">
+                <div class="col-12">
+                    <div class="card-group">
+                        <div class="card" th:each="cartItem : ${cartItems}">
+                            <div class="card-content" >
+                                <img class="card-img-top img-fluid" th:src="@{/assets/images/samples/1.png}"
+                                     alt="Card image cap">
+                                <div class="card-body">
+                                    <h4 class="card-title">[[${cartItem.getCartItemId()}]]</h4>
+                                    <span th:id="'itemNm_' + ${cartItem.cartItemId}"
+                                          th:data-name="${cartItem.itemNm}" th:text="${cartItem.itemNm}"></span>
+                                    <p class="card-text">
+                                        [[${cartItem.getPrice()}]]</p>
+                                    <small class="text-muted">Last updated 3 mins ago</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-content">
+                                <img class="card-img-top img-fluid" th:src="@{/assets/images/samples/2.png}"
+                                     alt="Card image cap"/>
+                                <div class="card-body">
+                                    <h4 class="card-title"></h4>
+                                    <p class="card-text">
+                                        This card has supporting text below as a natural lead-in to
+                                        additional
+                                        content.
+                                    </p>
+                                    <small class="text-muted">Last updated 3 mins ago</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-content">
+                                <img class="card-img-top img-fluid" th:src="@{/assets/images/samples/3.png}"
+                                     alt="Card image cap">
+                                <div class="card-body">
+                                    <h4 class="card-title">Card title</h4>
+                                    <p class="card-text">
+                                        This card has supporting text below as a natural lead-in to
+                                        additional
+                                        content.
+                                    </p>
+                                    <small class="text-muted">Last updated 3 mins ago</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-content">
+                                <img class="card-img-top img-fluid" th:src="@{/assets/images/samples/4.png}"
+                                     alt="Card image cap">
+                                <div class="card-body">
+                                    <h4 class="card-title">Card title</h4>
+                                    <p class="card-text">
+                                        This card has supporting text below as a natural lead-in to
+                                        additional
+                                        content.
+                                    </p>
+                                    <small class="text-muted">Last updated 3 mins ago</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <script>
+
+            var selectedItems = [];
+            var cartItemIds = []; // 추가: 선택된 아이템들의 cartItemId를 저장하는 배열
+
+            $(document).ready(function () {
+                checkCartItems();
+
+                $("input[name=cartChkBox]").change(function () {
+                    var orderTotalPrice = getOrderTotalPrice();
+                    $("#orderTotalPrice").html(orderTotalPrice + '원');
+                });
+            });
+
+            // function checkCartItems() {
+            //     if ($(".table-body-row").length === 0) {
+            //         alert('장바구니가 비어있습니다!');
+            //         window.location.href = '/';
+            //     }
+            // }
+
+            function getOrderTotalPrice() {
+                var orderTotalPrice = 0;
+                $("input[name=cartChkBox]:checked").each(function () {
+                    var cartItemId = $(this).val();
+                    var price = $("#price_" + cartItemId).attr("data-price");
+                    var count = $("#count_" + cartItemId).val();
+                    var subTotalPrice = price * count;
+                    orderTotalPrice += subTotalPrice;
+                });
+
+                // 콤마를 추가하여 숫자를 포맷팅
+                const formattedOrderTotal = orderTotalPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+
+                // 포맷팅된 주문 총 금액을 콘솔에 출력 (선택적)
+                console.log("formattedOrderTotal:", formattedOrderTotal);
+
+                return formattedOrderTotal;
+            }
+
+            function changeCount(obj) {
+                var count = obj.value;
+                var cartItemId = obj.id.split('_')[1];
+                var price = $("#price_" + cartItemId).data("price");
+                var totalPrice = price * count;
+
+                console.log("count:", count);
+                console.log("cartItemId:", cartItemId);
+                console.log("price:", price);
+                console.log("totalPrice:", totalPrice);
+
+                $("#totalPrice_" + cartItemId).html(totalPrice + "원");
+
+                // 주문 데이터 업데이트
+                updateOrderData(cartItemId, count);
+
+                var orderTotalPrice = getOrderTotalPrice();
+                $("#orderTotalPrice").html(orderTotalPrice + '원');
+            }
+
+            function checkAll() {
+                if ($("#checkall").prop("checked")) {
+                    $("input[name=cartChkBox]").prop("checked", true);
+                } else {
+                    $("input[name=cartChkBox]").prop("checked", false);
+                }
+                var orderTotalPrice = getOrderTotalPrice();
+                $("#orderTotalPrice").html(orderTotalPrice + '원');
+            }
+
+
+            function deleteCartItem(obj) {
+                var cartItemId = obj.dataset.id;
+                var url = "/cartItem/" + cartItemId;
+
+                $.ajax({
+                    url: url,
+                    type: "DELETE",
+                    dataType: "json",
+                    cache: false,
+                    success: function (result, status) {
+                        location.href = '/cart';
+                    },
+                    error: function (jqXHR, status, error) {
+
+                        if (jqXHR.status == '401') {
+                            alert('로그인 후 이용해주세요');
+                            location.href = '/members/login';
+                        } else {
+                            alert(jqXHR.responseJSON.message);
+                        }
+
+                    }
+                });
+            }
+
+            function updateOrderData(cartItemId, count) {
+                // 선택된 아이템 배열에서 해당 cartItemId를 찾아 업데이트
+                for (var i = 0; i < selectedItems.length; i++) {
+                    if (selectedItems[i].cartItemId === cartItemId) {
+                        selectedItems[i].count = count;
+                        break;
+                    }
+                }
+            }
+
+            function orders() {
+
+                $("input[name='cartChkBox']:checked").each(function () {
+                    var cartItemId = $(this).val();
+                    var itemNm = $("#itemNm_" + cartItemId).attr("data-name");
+                    var quantity = $("#count_" + cartItemId).val();
+                    var price = parseFloat($("#price_" + cartItemId).attr("data-price"));
+
+                    var cartItemDto = {
+                        cartItemId: cartItemId,
+                        itemNm: itemNm,
+                        count: quantity,
+                        price: price*quantity,
+                        imgUrl: ''
+                    };
+
+                    selectedItems.push(cartItemDto);
+                    cartItemIds.push(cartItemId); // 추가: cartItemId를 배열에 저장
+                });
+
+                var orderTotalPrice = parseFloat($("#orderTotalPrice").text());
+
+                var cartDetailDto = {
+                    cartDetailDto: selectedItems,
+                    orderTotalPrice: orderTotalPrice,
+                    cartItemIds: cartItemIds // 추가: cartItemId 배열을 전달
+                };
+
+                // 페이지 이동 시 데이터를 함께 전달
+                window.location.href = "/checkout?orderData=" + encodeURIComponent(JSON.stringify(cartDetailDto))
+                    + "&cartItemId=" + encodeURIComponent(cartItemIds);
+            }
+
+        </script>
+</th:block>
+</th:block>
