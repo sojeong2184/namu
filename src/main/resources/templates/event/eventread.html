@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{layout/header :: setContent(~{this::content} )}">
+    <th:block th:fragment="content">
+        <link rel="stylesheet" th:href="@{/assets/css/app.css}">
+        <link rel="stylesheet" th:href="@{/assets/css/bootstrap.css}">
+        <style>
+            a {
+                color: #435ebe;
+                text-decoration: none;
+            }
+        </style>
+        <div
+                class="hero page-inner overlay"
+                style="background-image: url('images/hero_bg_1.jpg')"
+        >
+            <div class="container">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-lg-9 text-center mt-5">
+                        <h1 class="heading" data-aos="fade-up">이벤트</h1>
+
+                        <nav
+                                aria-label="breadcrumb"
+                                data-aos="fade-up"
+                                data-aos-delay="200"
+                        >
+                            <ol class="breadcrumb text-center justify-content-center">
+                                <li class="breadcrumb-item"><a th:href="@{/index}">Home</a></li>
+                                <li
+                                        class="breadcrumb-item active text-white-50"
+                                        aria-current="page"
+                                >
+                                    이벤트
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div><BR>
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-xl-8 col-md-10 col-sm-12">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-body">
+                                <h4 class="card-title">[[${edto.etitle}]]</h4>
+                                <!-- 추가: 이벤트 날짜 표시 -->
+                                <p class="card-text" style="font-size: 12px; color: black;">
+                                    [[${#temporals.format(edto.regDate, 'yyyy/MM/dd HH:mm:ss')}]]
+                                </p>
+                            </div>
+                            <hr>
+                            <div id="carouselExampleSlidesOnly " class="carousel slide " data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active" th:each="eventImage: ${edto.imageDTOList}" th:data-file="${eventImage.getThumbnailURL()}">
+                                        <img th:if="${eventImage.path != null}"
+                                             th:src="|/display?fileName=${eventImage.getThumbnailURL()}|"
+                                             class="d-block mx-auto"
+                                             alt="Image Architecture"
+                                             style="max-width: 40%; height: auto;">
+                                    </div>
+                                </div>
+                                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">이전</span>
+                                </a>
+                                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">다음</span>
+                                </a>
+                            </div>
+                            <hr>
+                            <div class="card-body">
+
+                                <p class="card-text" style="white-space: pre-line;">
+                                    [[${edto.econtent}]]
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</th:block>

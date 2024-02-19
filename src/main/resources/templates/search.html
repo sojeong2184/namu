@@ -1,0 +1,147 @@
+<th:block th:replace="~{layout/header :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+
+        <div
+                class="hero page-inner overlay"
+                style="background-image: url('images/hero_bg_1.jpg')"
+        >
+            <div class="container">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-lg-9 text-center mt-5">
+                        <h1 class="heading" data-aos="fade-up">검색결과</h1>
+
+                        <nav
+                                aria-label="breadcrumb"
+                                data-aos="fade-up"
+                                data-aos-delay="200"
+                        >
+                            <ol class="breadcrumb text-center justify-content-center">
+                                <li class="breadcrumb-item"><a th:href="@{/index}">Home</a></li>
+                                <li
+                                        class="breadcrumb-item active text-white-50"
+                                        aria-current="page"
+                                >
+                                    Properties
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form action="/search" method="post" id="searchForm">
+            <div class="input-group">
+                <input class="form-control" name="iname" type="text">
+                <button type="submit" class="btn btn-primary btn-search">SEARCH</button>
+            </div>
+        </form>
+
+
+
+        <div class="section section-properties">
+            <div class="container">
+                <div class="row" >
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                        <div class="property-item mb-30">
+                            <a th:href="@{/article(ino = ${dto.ino})}" class="img">
+                                <img th:if="${dto.imageDTOList.size() > 0 && dto.imageDTOList[0].path != null}"
+                                     th:src="|/display?fileName=${dto.imageDTOList[0].getThumbnailURL()}|" alt="Image" class="img-fluid" />
+                            </a>
+
+                            <div class="property-content">
+                                <div class="price mb-2"><span>[[${dto.iprice}]] 원</span></div>
+                                <div>
+                  <span class="d-block mb-2 text-black-50"
+                  >[[${dto.ilocation}]]</span
+                  >
+                                    <span class="city d-block mb-3">[[${dto.iname}]]</span>
+
+                                    <div class="specs d-flex mb-4">
+                    <span class="d-block d-flex align-items-center me-3">
+                      <span class="icon-bed me-2"></span>
+                      <span class="caption">2 beds</span>
+                    </span>
+                                        <span class="d-block d-flex align-items-center">
+                      <span class="icon-bath me-2"></span>
+                      <span class="caption">2 baths</span>
+                    </span>
+                                    </div>
+
+                                    <a
+                                            th:href="@{/article(ino = ${dto.ino})}"
+                                            class="btn btn-primary py-2 px-3"
+                                    >더보기</a
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <!-- .item -->
+                    </div>
+                </div>
+                <div class="row align-items-center py-5">
+                    <div class="col-lg-3">Pagination (1 of 10)</div>
+                    <div class="col-lg-6 text-center">
+                        <div class="custom-pagination">
+                            <a href="#">1</a>
+                            <a href="#" class="active">2</a>
+                            <a href="#">3</a>
+                            <a href="#">4</a>
+                            <a href="#">5</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<!--        <ul class="pagination h-100 justify-content-center align-items-center">-->
+<!--            <li class="page-item" th:if="${result.prev}">-->
+<!--                <a class="page-link" th:href="@{/properties(page=${result.start -1})}" tabindex="-1">이전페이지</a>-->
+<!--            </li>-->
+
+<!--            <li th:class=" 'page-item' + ${result.page == page?'active':''} "-->
+<!--                th:each="page: ${result.pageList}">-->
+<!--                <a class="page-link" th:href="@{/properties(page = ${page} ,-->
+<!--                    type=${pageRequestDTO.type} ,-->
+<!--                    keyword = ${pageRequestDTO.keyword})}">-->
+<!--                    [[${page}]]-->
+<!--                </a>-->
+<!--            </li>-->
+
+<!--            <li class="page-item" th:if="${result.next}">-->
+<!--                <a class="page-link" th:href="@{/properties(page=${result.end+1} ,-->
+<!--                    type=${pageRequestDTO.type} ,-->
+<!--                    keyword = ${pageRequestDTO.keyword})}">다음페이지</a>-->
+<!--            </li>-->
+<!--        </ul>-->
+
+
+        <script th:inline="javascript">
+
+            var msg = [[${msg}]];
+
+            console.log(msg);
+
+            if(msg){
+                $(".modal").modal();
+            }
+            var searchForm = $("#searchForm");
+
+            $('.btn-search').click(function(e){
+
+                searchForm.submit();
+
+            });
+
+            $('.btn-clear').click(function(e){
+
+                searchForm.empty().submit();
+
+            });
+
+
+        </script>
+
+    </th:block>
+</th:block>

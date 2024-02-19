@@ -1,0 +1,69 @@
+<th:block th:replace="~{layout/header :: setContent(~{this::content} )}">
+
+  <th:block th:fragment="content">
+
+    <div
+            class="hero page-inner overlay"
+            style="background-image: url('images/hero_bg_1.jpg')"
+    >
+      <div class="container">
+        <div class="row justify-content-center align-items-center">
+          <div class="col-lg-9 text-center mt-5">
+            <h1 class="heading" data-aos="fade-up">이벤트</h1>
+
+            <nav
+                    aria-label="breadcrumb"
+                    data-aos="fade-up"
+                    data-aos-delay="200"
+            >
+              <ol class="breadcrumb text-center justify-content-center">
+                <li class="breadcrumb-item"><a th:href="@{/index}">Home</a></li>
+                <li
+                        class="breadcrumb-item active text-white-50"
+                        aria-current="page"
+                >
+                  이벤트
+                </li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="300" th:each="dto : ${eresult.dtoList}">
+            <hr>
+            <div class="box-feature mb-4">
+              <div class="text-center">
+                <p><a th:href="@{/event/eventread(eno=${dto.eno})}" class="learn-more text-center"><span>
+                            <img th:if="${dto.imageDTOList.size() > 0 && dto.imageDTOList[0].path != null }"
+                                 th:src="|/display?fileName=${dto.imageDTOList[0].getThumbnailURL()}|"
+                                 style="max-width: 250px; max-height: 170px;">
+                        </span></a></p>
+              </div>
+              <br>
+              <hr>
+              <h3 class="text-black mb-3 font-weight-bold">
+                <p><a th:href="@{/event/eventread(eno=${dto.eno})}" class="learn-more">[[${dto.etitle}]]</a></p>
+              </h3>
+
+              <!-- 추가: 이벤트 날짜 표시 -->
+              <p class="text-black-50">
+                [[${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm:ss')}]]
+              </p>
+
+              <p class="text-black-50">
+                [[${dto.econtent}]]
+              </p>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </th:block>
+</th:block>

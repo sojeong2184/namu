@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:fragment="setContent(content)">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta name="author" content="Untree.co"/>
+        <link rel="shortcut icon" th:href="@{/images/favicon.png}"/>
+
+        <meta name="description" content=""/>
+        <meta name="keywords" content="bootstrap, bootstrap5"/>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"/>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+        <link rel="stylesheet"
+              href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap"/>
+
+        <link rel="stylesheet" th:href="@{/fonts/icomoon/style.css}"/>
+        <link rel="stylesheet" th:href="@{/fonts/flaticon/font/flaticon.css}"/>
+
+        <link rel="stylesheet" th:href="@{/css/tiny-slider.css}"/>
+        <link rel="stylesheet" th:href="@{/css/aos.css}"/>
+        <link rel="stylesheet" th:href="@{/css/style.css}"/>
+
+        <!-- admin -->
+        <link rel="stylesheet" th:href="@{/assets/vendors/bootstrap-icons/bootstrap-icons.css}">
+        <link rel="stylesheet" th:href="@{/assets/css/app.css}">
+        <link rel="stylesheet" th:href="@{assets/css/pages/email.css}">
+        <link rel="shortcut icon" th:href="@{/assets/images/favicon.svg}" type="image/x-icon">
+
+
+        <title>NaMu</title>
+    </head>
+    <body>
+    <div class="site-mobile-menu site-navbar-target">
+        <div class="site-mobile-menu-header">
+            <div class="site-mobile-menu-close">
+                <span class="icofont-close js-menu-toggle"></span>
+            </div>
+        </div>
+        <div class="site-mobile-menu-body"></div>
+    </div>
+
+    <nav class="site-nav">
+        <div class="container">
+            <div class="menu-bg-wrap">
+                <div class="site-navigation">
+                    <a th:href="@{/index}" class="logo m-0 float-start">NaMu</a>
+
+                    <ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
+                        <li><a th:href="@{/index}">Home</a></li>
+                        <li class="has-children">
+                            <a th:href="@{/properties}">중고상품</a>
+                            <ul class="dropdown">
+                                <li><a th:href="@{/properties}">구매하기</a></li>
+                                <li><a th:href="@{/item/register}">판매하기</a></li>
+<!--                                <li class="has-children">-->
+<!--                                    <a th:href="@{/item/register}">등록하기</a>-->
+<!--                                    <ul class="dropdown">-->
+<!--                                        <li><a th:href="@{/}">Sub Menu One</a></li>-->
+<!--                                        <li><a th:href="@{/}">Sub Menu Two</a></li>-->
+<!--                                        <li><a th:href="@{/}">Sub Menu Three</a></li>-->
+<!--                                    </ul>-->
+<!--                                </li>-->
+                            </ul>
+                        </li>
+                        <li><a th:href="@{/question/qna}">QnA</a></li>
+                        <li><a th:href="@{/about}">About</a></li>
+                        <!--<li><a th:href="@{/contact}">중고등록하기</a></li>-->
+                        <li><a th:href="@{/event/list}">이벤트</a></li>
+                        <li><a th:href="@{/notice/list}">공지사항</a></li>
+                        <!--<li><a th:href="@{/chat/chatList}">채팅하기</a></li>-->
+                        <li><a th:href="@{/admin/index}">어드민</a></li>
+                        <li><a th:href="@{/mypage/myinfo/info}">마이페이지</a></li>
+                        <!--<li><a th:href="@{/templates/adminTemplate/adindex}" sec:authorize="isAnonymous()">어드민</a></li>-->
+                        <!--<li class="has-children" sec:authorize="isAuthenticated()">
+                            <a th:href="@{/member/mypage}" sec:authorize="isAuthenticated()">마이페이지</a>
+                            <ul class="dropdown">
+                                <li><a th:href="@{/member/mypage}" sec:authorize="isAuthenticated()">회원정보</a></li>
+                                <li><a th:href="@{/orderList}" sec:authorize="isAuthenticated()">결제관리</a></li>
+                                <li><a th:href="@{/mypage/shpping}" sec:authorize="isAuthenticated()">배송지관리</a></li>
+                                <li><a sec:authorize="isAuthenticated()" th:href="@{/member/logout}">로그아웃</a></li>
+                            </ul>
+                        </li>-->
+                        <li><a sec:authorize="isAnonymous()" th:href="@{/member/login}">로그인</a>
+                            <a sec:authorize="isAuthenticated()" th:href="@{/member/logout}">로그아웃</a></li>
+                    </ul>
+
+                    <a href="#" class="burger light me-auto float-end mt-1 site-menu-toggle js-menu-toggle d-inline-block d-lg-none"
+                       data-toggle="collapse" data-target="#main-navbar">
+                        <span></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <th:block th:replace="${content}"></th:block>
+
+    <div class="site-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="widget">
+                        <h3>Contact</h3>
+                        <address>경기도 화성시 기안동</address>
+                        <ul class="list-unstyled links">
+                            <li><a href="tel://0317009900">+82(031)-700-9900</a></li>
+                            <li><a href="tel://0317009900">+82(031)-700-9900</a></li>
+                            <li>
+                                <a href="mailto:admin@namutrading.com">admin@namutrading.com</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.widget -->
+                </div>
+                <!-- /.col-lg-4 -->
+                <div class="col-lg-4">
+                    <div class="widget">
+                        <h3>메뉴</h3>
+                        <ul class="list-unstyled float-start links">
+                            <li><a th:href="@{/about}">사이트에 대해</a></li>
+                            <li><a th:href="@{/properties}">중고 목록</a></li>
+                            <li><a th:href="@{/item/register}">판매하기</a></li>
+                            <li><a th:href="@{/question/qna}">QnA</a></li>
+                            <li><a th:href="@{/about}">About</a></li>
+                            <li><a th:href="@{/event/list}">이벤트</a></li>
+                            <li><a th:href="@{/notice/list}">공지사항</a></li>
+                        </ul>
+                    </div>
+                    <!-- /.widget -->
+                </div>
+                <!-- /.col-lg-4 -->
+                <div class="col-lg-4">
+                    <div class="widget">
+                        <h3>자회사</h3>
+                        <ul class="list-unstyled links">
+                            <li><a th:href="@{/}">두리안 파이팅</a></li>
+                            <li><a th:href="@{/}">유나무</a></li>
+                            <li><a th:href="@{/}">두리안 슈팅</a></li>
+                        </ul>
+
+                        <ul class="list-unstyled social">
+                            <li>
+                                <a th:href="@{https://www.instagram.com/}"><span class="icon-instagram"></span></a>
+                            </li>
+                            <li>
+                                <a th:href="@{https://twitter.com/}"><span class="icon-twitter"></span></a>
+                            </li>
+                            <li>
+                                <a th:href="@{https://www.facebook.com/}"><span class="icon-facebook"></span></a>
+                            </li>
+                            <li>
+                                <a th:href="@{https://kr.linkedin.com/}"><span class="icon-linkedin"></span></a>
+                            </li>
+                            <li>
+                                <a th:href="@{https://www.pinterest.co.kr/}"><span class="icon-pinterest"></span></a>
+                            </li>
+                            <li>
+                                <a th:href="@{https://dribbble.com/}"><span class="icon-dribbble"></span></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.widget -->
+                </div>
+                <!-- /.col-lg-4 -->
+            </div>
+            <!-- /.row -->
+
+            <div class="row mt-5">
+                <div class="col-12 text-center">
+                    <!--
+                      **==========
+                      NOTE:
+                      Please don't remove this copyright link unless you buy the license here https://untree.co/license/
+                      **==========
+                    -->
+
+                    <p>
+                        Copyright &copy;
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>
+                        . All Rights Reserved. &mdash; Designed with love by
+                        <a href="https://untree.co">Namutrading.com</a>
+                        <!-- License information: https://untree.co/license/ -->
+                    </p>
+                    <div>
+                        Distributed by
+                        <a th:href="@{/index}" target="_blank">두리안 주식회사</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.container -->
+    </div>
+    <!-- /.site-footer -->
+
+    <!-- Preloader -->
+    <div id="overlayer"></div>
+    <div class="loader">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/tiny-slider.js}"></script>
+    <script th:src="@{/js/aos.js}"></script>
+    <script th:src="@{/js/navbar.js}"></script>
+    <script th:src="@{/js/counter.js}"></script>
+    <script th:src="@{/js/custom.js}"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script th:inline="javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            // 현재 페이지의 경로 추출
+            var currentPath = window.location.pathname;
+
+            // 메뉴 아이템을 찾아 active 클래스 추가
+            var menuItems = document.querySelectorAll('.js-clone-nav li');
+            menuItems.forEach(function (menuItem) {
+                var menuItemPath = menuItem.querySelector('a').getAttribute('href');
+                if (currentPath === menuItemPath) {
+                    menuItem.classList.add('active');
+                }
+            });
+        });
+    </script>
+    </body>
+</th:block>
+</html>

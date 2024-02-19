@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:fragment="setContent(content)">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta name="author" content="Untree.co"/>
+        <link rel="shortcut icon" th:href="@{/images/favicon.png}"/>
+
+        <meta name="description" content=""/>
+        <meta name="keywords" content="bootstrap, bootstrap5"/>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"/>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+        <link rel="stylesheet"
+              href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap"/>
+
+        <link rel="stylesheet" th:href="@{/fonts/icomoon/style.css}"/>
+        <link rel="stylesheet" th:href="@{/fonts/flaticon/font/flaticon.css}"/>
+
+        <link rel="stylesheet" th:href="@{/css/tiny-slider.css}"/>
+        <link rel="stylesheet" th:href="@{/css/aos.css}"/>
+        <link rel="stylesheet" th:href="@{/css/style.css}"/>
+
+        <!--chat admin에서 가져옴-->
+        <link rel="stylesheet" th:href="@{/assets/css/app.css}">
+        <!--<link rel="stylesheet" th:href="@{/assets/css/bootstrap.css}">-->
+        <link rel="stylesheet" th:href="@{/assets/css/pages/chatList.css}">
+        <link rel="stylesheet" th:href="@{/assets/vendors/bootstrap-icons/bootstrap-icons.css}">
+        <link rel="stylesheet" th:href="@{/assets/css/pages/email.css}">
+        <link rel="stylesheet" th:href="@{/assets/css/widgets/chat.css}">
+
+
+        <title>NaMu</title>
+    </head>
+    <body>
+    <div class="site-mobile-menu site-navbar-target">
+        <div class="site-mobile-menu-header">
+            <div class="site-mobile-menu-close">
+                <span class="icofont-close js-menu-toggle"></span>
+            </div>
+        </div>
+        <div class="site-mobile-menu-body"></div>
+    </div>
+
+    <nav class="site-nav">
+        <div class="container">
+            <div class="menu-bg-wrap">
+                <div class="site-navigation">
+                    <a th:href="@{/index}" class="logo m-0 float-start">Namu</a>
+
+                    <ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
+                        <li class="active"><a th:href="@{/index}">Home</a></li>
+                        <li class="has-children">
+                            <a th:href="@{/properties}">중고물품</a>
+                            <ul class="dropdown">
+                                <li><a th:href="@{/static}">구매하기</a></li>
+                                <li><a th:href="@{/static}">판매하기</a></li>
+                                <li class="has-children">
+                                    <a th:href="@{/static}">Dropdown</a>
+                                    <ul class="dropdown">
+                                        <li><a th:href="@{/static}">Sub Menu One</a></li>
+                                        <li><a th:href="@{/static}">Sub Menu Two</a></li>
+                                        <li><a th:href="@{/static}">Sub Menu Three</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a th:href="@{/question/qna}">QnA</a></li>
+                        <li><a th:href="@{/about}">About</a></li>
+                        <li><a th:href="@{/contact}">중고등록하기</a></li>
+                        <li><a th:href="@{/chat/chatList}">채팅하기</a></li>
+                        <li><a th:href="@{/admin/index}">어드민</a></li>
+                        <li><a sec:authorize="isAnonymous()" th:href="@{/member/login}">로그인</a>
+                            <a sec:authorize="isAuthenticated()" th:href="@{/member/logout}">로그아웃</a></li>
+                    </ul>
+
+                    <a href="#"
+                       class="burger light me-auto float-end mt-1 site-menu-toggle js-menu-toggle d-inline-block d-lg-none"
+                       data-toggle="collapse" data-target="#main-navbar">
+                        <span></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero page-inner overlay" style="background-image: url('/images/hero_bg_1.jpg');height: 350px;">
+        <div class="container">
+            <div class="row justify-content-center align-items-center" style="height: 350px;">
+                <div class="col-lg-9 text-center mt-5">
+                    <h1 class="heading" data-aos="fade-up">My Page</h1>
+
+                    <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+                        <ol class="breadcrumb text-center justify-content-center">
+                            <li class="breadcrumb-item"><a th:href="@{/index}">Home</a></li>
+                            <li class="breadcrumb-item active text-white-50" aria-current="page">Mypage</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4-mypage mb-5 mb-lg-0" data-aos="fade-up" data-aos-delay="100">
+                    <div class="contact-info">
+
+                        <div class="address mt-2">
+                            <!--<i class="icon-room"></i>-->
+                            <h4 class="mb-2">My Page</h4>
+                            </br>
+                        </div>
+
+                        <div class="address mt-2">
+                            <!--<i class="icon-room"></i>-->
+                            <h4 class="mb-2">
+                                <a th:href="@{/mypage/myinfo/info}">내 정보</a></h4>
+                        </div>
+
+                        <div class="open-hours mt-4">
+                            <!--<i class="icon-clock-o"></i>-->
+                            <h4 class="mb-2">
+                                <a th:href="@{/mypage/chat/chatList}">채팅</a></h4>
+                        </div>
+
+                        <div class="email mt-4">
+                            <!--<i class="icon-envelope"></i>-->
+                            <h4 class="mb-2">구매내역</h4>
+                        </div>
+
+                        <div class="phone mt-4">
+                            <!--<i class="icon-phone"></i>-->
+                            <h4 class="mb-2">판매내역</h4>
+                        </div>
+
+                        <div class="phone mt-4">
+                            <!--<i class="icon-phone"></i>-->
+                            <h4 class="mb-2">
+                                <a th:href="@{/mypage/heart}">나의 찜</a></h4>
+                        </div>
+
+                        <div class="phone mt-4">
+                            <!--<i class="icon-phone"></i>-->
+                            <h4 class="mb-2">
+                                <a th:href="@{/templates/admin/item/register}">상품등록</a></h4>
+                        </div>
+
+                        <div class="phone mt-4">
+                            <!--<i class="icon-phone"></i>-->
+                            <h4 class="mb-2">
+                                <a th:href="@{/mypage/shipping/register}">배송지관리</a></h4>
+                        </div>
+
+                    </div>
+                </div>
+
+                <th:block th:replace="${content}"></th:block>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="site-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="widget">
+                        <h3>Contact</h3>
+                        <address>43 Raymouth Rd. Baltemoer, London 3910</address>
+                        <ul class="list-unstyled links">
+                            <li><a href="tel://11234567890">+1(123)-456-7890</a></li>
+                            <li><a href="tel://11234567890">+1(123)-456-7890</a></li>
+                            <li>
+                                <a href="mailto:info@mydomain.com">info@mydomain.com</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.widget -->
+                </div>
+                <!-- /.col-lg-4 -->
+                <div class="col-lg-4">
+                    <div class="widget">
+                        <h3>Sources</h3>
+                        <ul class="list-unstyled float-start links">
+                            <li><a th:href="@{/about}">About us</a></li>
+                            <li><a th:href="@{/services}">Services</a></li>
+                            <li><a th:href="@{/static}">Vision</a></li>
+                            <li><a th:href="@{/static}">Mission</a></li>
+                            <li><a th:href="@{/static}">Terms</a></li>
+                            <li><a th:href="@{/static}">Privacy</a></li>
+                        </ul>
+                        <ul class="list-unstyled float-start links">
+                            <li><a th:href="@{/static}">Partners</a></li>
+                            <li><a th:href="@{/static}">Business</a></li>
+                            <li><a th:href="@{/static}">Careers</a></li>
+                            <li><a th:href="@{/static}">Blog</a></li>
+                            <li><a th:href="@{/static}">FAQ</a></li>
+                            <li><a th:href="@{/static}">Creative</a></li>
+                        </ul>
+                    </div>
+                    <!-- /.widget -->
+                </div>
+                <!-- /.col-lg-4 -->
+                <div class="col-lg-4">
+                    <div class="widget">
+                        <h3>Links</h3>
+                        <ul class="list-unstyled links">
+                            <li><a th:href="@{/static}">Our Vision</a></li>
+                            <li><a th:href="@{/static}">About us</a></li>
+                            <li><a th:href="@{/static}">Contact us</a></li>
+                        </ul>
+
+                        <ul class="list-unstyled social">
+                            <li>
+                                <a th:href="@{/static}"><span class="icon-instagram"></span></a>
+                            </li>
+                            <li>
+                                <a th:href="@{/static}"><span class="icon-twitter"></span></a>
+                            </li>
+                            <li>
+                                <a th:href="@{/static}"><span class="icon-facebook"></span></a>
+                            </li>
+                            <li>
+                                <a th:href="@{/static}"><span class="icon-linkedin"></span></a>
+                            </li>
+                            <li>
+                                <a th:href="@{/static}"><span class="icon-pinterest"></span></a>
+                            </li>
+                            <li>
+                                <a th:href="@{/static}"><span class="icon-dribbble"></span></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.widget -->
+                </div>
+                <!-- /.col-lg-4 -->
+            </div>
+            <!-- /.row -->
+
+            <div class="row mt-5">
+                <div class="col-12 text-center">
+                    <!--
+                      **==========
+                      NOTE:
+                      Please don't remove this copyright link unless you buy the license here https://untree.co/license/
+                      **==========
+                    -->
+
+                    <p>
+                        Copyright &copy;
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>
+                        . All Rights Reserved. &mdash; Designed with love by
+                        <a href="https://untree.co">Untree.co</a>
+                        <!-- License information: https://untree.co/license/ -->
+                    </p>
+                    <div>
+                        Distributed by
+                        <a th:href="@{/index}" target="_blank">두리안 주식회사</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.container -->
+    </div>
+    <!-- /.site-footer -->
+
+    <!-- Preloader -->
+    <div id="overlayer"></div>
+    <div class="loader">
+        <div class="spinner-border text-success" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/tiny-slider.js}"></script>
+    <script th:src="@{/js/aos.js}"></script>
+    <script th:src="@{/js/navbar.js}"></script>
+    <script th:src="@{/js/counter.js}"></script>
+    <script th:src="@{/js/custom.js}"></script>
+    </body>
+</th:block>
+</html>

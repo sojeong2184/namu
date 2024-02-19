@@ -1,0 +1,178 @@
+<th:block th:replace="~{layout/header :: setContent(~{this::content} )}" xmlns="http://www.w3.org/1999/html">
+
+    <th:block th:fragment="content">
+        <div class="hero page-inner overlay" style="background-image: url('/images/hero_bg_1.jpg')">
+            <div class="container">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-lg-9 text-center mt-5">
+                        <h1 class="heading" data-aos="fade-up">질문</h1>
+                        <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+                            <ol class="breadcrumb text-center justify-content-center">
+                                <li class="breadcrumb-item"><a th:href="@{/index}">메인</a></li>
+                                <li class="breadcrumb-item active text-white-50" aria-current="page">질문</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="row mt-3 mb-3">
+                        <form th:action="@{/question/qna}" th:method="get">
+                            <div class="input-group">
+                                <div class="col">
+                                    <input type="hidden" name="size" th:value="${pageRequestedDTO.size}">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <select class="form-select" name="type" style="height: 51.6px;">
+                                                <option value="">---</option>
+                                                <option value="t" th:selected="${pageRequestedDTO.type == 't'}">제목
+                                                </option>
+                                                <option value="c" th:selected="${pageRequestedDTO.type == 'c'}">내용
+                                                </option>
+                                                <option value="tc" th:selected="${pageRequestedDTO.type == 'tc'}">제목내용
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <input type="text" class="form-control" name="keyword"
+                                               th:value="${pageRequestedDTO.keyword}">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary searchBtn"
+                                                    type="submit">검색
+                                            </button>
+                                            <button class="btn btn-primary registerBtn"
+                                                    type="button">질문등록
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!--검색조건 선택화면 끝-->
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-body"></div>
+                            <table class="table">
+                                <thead><!--상단에 보여질 번호/제목/작성자/등록시간-->
+                                <tr>
+                                    <th class="text-center" scope="col">번호</th>
+                                    <th class="text-center" scope="col">제목</th>
+                                    <th class="text-center" scope="col">작성자</th>
+                                    <th class="text-center" scope="col">등록일</th>
+                                    <th class="text-center" scope="col">조회수</th>
+                                </tr>
+                                </thead>
+                                <tbody th:with="link = ${pageRequestedDTO.getLink()}"><!--화면에 보여질 내용물,반복문-->
+                                <tr th:each="dto:${responseDTO.dtoList}">
+                                    <th class="text-center" scope="row">[[${dto.qno}]]</th>
+                                    <td class="text-center">
+                                        <a th:if="${dto.secret}"
+                                           th:href="|@{/question/answer(qno =${dto.qno})}|">
+                                            <span>[[${dto.qtitle}]]</span>
+                                            <svg class="bi" width="1em" height="1em" fill="currentColor">
+                                                <use th:href="@{/assets/vendors/bootstrap-icons/bootstrap-icons.svg#lock-fill}"/>
+                                            </svg>
+                                        </a>
+                                        <a th:unless="${dto.secret }"
+                                           th:href="|@{/question/answer(qno =${dto.qno})}|">
+                                            <span>[[${dto.qtitle}]]</span>
+                                        </a>
+                                    </td>
+                                    <td class="text-center"><span th:if="${dto.member != null}"
+                                                                  th:text="${dto.member.mid}"></span></td>
+                                    <td class="text-center">[[${#temporals.format(dto.regDate, 'yyyy-MM-dd')}]]</td>
+                                    <td class="text-center"><span th:text="${dto.view}"></span></td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- 목록화면끝 -->
+                            <!--페이지 번호들을 화면에 출력-->
+                            <div class="float-end">
+                                <ul class="pagination flex-wrap">
+                                    <li class="page-item" th:if="${responseDTO.prev}">
+                                        <a class="page-link" th:data-num="${responseDTO.start -1}">Previous</a>
+                                    </li>
+                                    <th:block th:each="i: ${#numbers.sequence(responseDTO.start, responseDTO.end)}">
+                                        <!--  #numbers.sequence() 특정한 범위의 연속된 숫자를 만듬-->
+
+                                        <li th:class="${responseDTO.page == i}?'page-item active':'page-item'">
+                                            <a class="page-link" th:data-num="${i}">[[${i}]]</a>
+                                            <!--data-num 이라는 속성으로 페이지번호를 처리-->
+                                        </li>
+                                    </th:block>
+
+                                    <li class="page-item" th:if="${responseDTO.next}">
+                                        <a class="page-link" th:data-num="${responseDTO.end + 1}">Next</a>
+                                        <!--페이지 번호들을 화면에 출력 끝-->
+                                    </li>
+                                </ul>
+                            </div>
+                        </div><!--end card body-->
+                    </div><!--end card-->
+                </div>
+            </div>
+        </div>
+
+        <!--등록시모달창-->
+        <div class="modal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Modal body text goes here.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script th:inline="javascript">
+            //이벤트처리
+            document.querySelector(".pagination").addEventListener("click", function (e) {
+                e.preventDefault()
+                e.stopPropagation()
+                const target = e.target
+
+                if (target.tagName !== 'A') {
+                    return
+                }
+
+                const num = target.getAttribute("data-num")
+
+                const formObj = document.querySelector("form")
+
+                formObj.innerHTML += `<input type='hidden' name='page' value='${num}'>`
+
+                formObj.submit();
+
+            }, false)
+
+            document.querySelector(".registerBtn").addEventListener("click", function (e) {
+                e.preventDefault()
+                e.stopPropagation()
+
+                self.location = '/question/register'
+
+            }, false)
+
+            //show modal ..등록시 모달창이 떠야하는데 안뜸.
+            const result = [[${result}]]
+
+            const modal = new bootstrap.Modal(document.querySelector(".modal"))
+
+            if (result) {
+                modal.show()
+            }
+        </script>
+    </th:block>
+</th:block>

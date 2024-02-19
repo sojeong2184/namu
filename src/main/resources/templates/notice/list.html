@@ -1,0 +1,113 @@
+<th:block th:replace="~{layout/header :: setContent(~{this::content} )}" xmlns="http://www.w3.org/1999/html">
+
+    <th:block th:fragment="content">
+        <div class="hero page-inner overlay" style="background-image: url('/images/hero_bg_1.jpg')">
+            <div class="container">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-lg-9 text-center mt-5">
+                        <h1 class="heading" data-aos="fade-up">공지사항</h1>
+                        <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+                            <ol class="breadcrumb text-center justify-content-center">
+                                <li class="breadcrumb-item"><a th:href="@{/index}">Home</a></li>
+                                <li class="breadcrumb-item active text-white-50" aria-current="page">QnA</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 본문 시작 -->
+        <div class="section bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="row mt-3">
+                        <form th:action="@{/notice/list}" th:method="get" id="searchForm">
+                            <div class="input-group">
+                                <input type="hidden" name="page" value="1">
+                                <div class="input-group-prepend">
+                                    <select class="form-select" name="type" style="height: 51.6px;">
+                                        <option th:selected="${pageRequestDTO.type == null}">-------</option>
+                                        <option value="t" th:selected="${pageRequestDTO.type =='t'}">제목</option>
+                                        <option value="t" th:selected="${pageRequestDTO.type =='c'}">내용</option>
+                                        <option value="tc" th:selected="${pageRequestDTO.type =='tc'}">제목 + 내용</option>
+                                    </select>
+                                </div>
+                                <input class="form-control" name="keyword" th:value="${pageRequestDTO.keyword}">
+                                <div class="input-group-append" id="button-addon4">
+                                    <button class="btn btn-outline-secondary btn-search" type="button">검색하기</button>
+                                    <button class="btn btn-outline-secondary btn-clear" type="button">초기화</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-body"></div>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th class="text-center" scope="col">번호</th>
+                                    <th class="text-center" scope="col">제목</th>
+                                    <th class="text-center" scope="col">등록일</th>
+                                    <th class="text-center" scope="col">조회수</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="dto : ${result.dtoList}">
+                                    <th class="text-center" scope="row">[[${dto.nno}]]</th>
+                                    <td class="text-center"><a th:href="@{/notice/read(nno=${dto.nno})}">[[${dto.ntitle}]]</a>
+                                    </td>
+                                    <td class="text-center">[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
+                                    <td class="text-center"><span th:text="${dto.view}"></span></td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <ul class="pagination justify-content-center align-items-center">
+                                <li class="page-item" th:if="${result.prev}">
+                                    <a class="page-link" th:href="@{/notice/list(page=${result.start -1})}"
+                                       tabindex="-1">이전페이지</a>
+                                </li>
+
+                                <li th:class=" 'page-item' + ${result.page == page?'active':''} "
+                                    th:each="page: ${result.pageList}">
+                                    <a class="page-link" th:href="@{/notice/list(page = ${page} ,
+                                    type=${pageRequestDTO.type}, keyword = ${pageRequestDTO.keyword})}">
+                                        [[${page}]]
+                                    </a>
+                                </li>
+
+                                <li class="page-item" th:if="${result.next}">
+                                    <a class="page-link" th:href="@{/notice/list(page=${result.end+1} ,
+                                    type=${pageRequestDTO.type}, keyword = ${pageRequestDTO.keyword})}">다음페이지</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script th:inline="javascript">
+
+            var msg = [[${msg}]];
+            console.log(msg);
+
+            if (msg) {
+                $(".modal").modal();
+            }
+
+            var searchForm = $("#searchForm");
+
+            $('.btn-search').click(function (e) {
+                searchForm.submit();
+            });
+
+            $('.btn-clear').click(function (e) {
+                searchForm.empty().submit();
+            });
+        </script>
+    </th:block>
+</th:block>

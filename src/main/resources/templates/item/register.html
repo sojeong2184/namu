@@ -1,0 +1,274 @@
+<th:block th:replace="~{layout/header :: setContent(~{this::content} )}">
+
+  <th:block th:fragment="content">
+    <link th:href="@{/crud/stylesImage.css}" rel="stylesheet"/>
+    <!--crud전용-->
+    <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- Bootstrap core JavaScript -->
+    <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+    <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+    <div class="hero page-inner overlay" style="background-image: url('/images/hero_bg_1.jpg')">
+      <div class="container">
+        <div class="row justify-content-center align-items-center">
+          <div class="col-lg-9 text-center mt-5">
+            <h1 class="heading" data-aos="fade-up">중고 등록하기</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="container">
+        <div class="row-contact">
+          <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
+            <form th:action="@{/item/register}" th:method="post">
+              <div class="row">
+                <!-- 상품명 -->
+                <div class="col-9 mb-3">
+                  <input type="text" class="form-control" name="iname" placeholder="제목"/>
+                </div>
+                <!-- 카테고리 -->
+                <div class="col-3 mb-3">
+                  <fieldset class="form-group">
+                    <select class="form-select" id="icategory" name="icategory" >
+                      <option value="전자제품">전자제품</option>
+                      <option value="가구/식기류">가구/식기류</option>
+                      <option value="식품">식품</option>
+                      <option value="패션">패션</option>
+                      <option value="반려동물용품">반려동물용품</option>
+                      <option value="티켓">티켓</option>
+                      <option value="기타">기타</option>
+
+                    </select>
+                  </fieldset>
+                </div>
+                <!-- 가격 -->
+                <div class="col-12 mb-3" style="height: 39px;">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text">₩</span>
+                    <input type="text" class="form-control" name="iprice"
+                           aria-label="Amount (to the nearest dollar)"
+                           placeholder="가격">
+                  </div>
+                </div>
+                <!-- 거래 방식 -->
+                <div class="col-12 mb-3">
+                  <!--<input type="text" class="form-control" name="idealway" placeholder="거래방식"/>-->
+                  <fieldset class="form-group">
+                    <select class="form-select" id="idealway" name="idealway" >
+                      <option value="직거래">직거래</option>
+                      <option value="택배">택배</option>
+                    </select>
+                  </fieldset>
+                </div>
+                <!-- 주소 (거래 방식-직거래) -->
+                <div class="col-12 mb-3">
+                  <input type="text" class="form-control" name="ilocation" placeholder="주소"/>
+                </div>
+                <!-- 상세 설명 -->
+                <div class="col-12 mb-3">
+                  <textarea name="idescription" id="" cols="30" rows="7" class="form-control"
+                            placeholder="상세 설명"></textarea>
+                </div>
+                <!-- 이미지 -->
+                <div class="form-group fileForm">
+                  <label>이미지</label>
+                  <div class="custom-file">
+                    <input type="file"  class="custom-file-input files" id="fileInput" multiple>
+                    <label class="custom-file-label" data-browse="Browse"></label>
+                  </div>
+                </div>
+
+                <div class="box"></div>
+
+                <input type="hidden" class="form-control" name="mid" th:value="${mdto.mid}"/>
+
+                <style>
+                  .uploadResult {
+                    width: 100%;
+                    background-color: #ffffff;
+                    margin-top: 10px;
+                  }
+
+                  .uploadResult ul {
+                    display: flex;
+                    flex-flow: row;
+                    justify-content: center;
+                    align-items: center;
+                    vertical-align: top;
+                    overflow: auto;
+                  }
+
+                  .uploadResult ul li {
+                    list-style: none;
+                    padding: 10px;
+                    margin-left: 2em;
+                  }
+
+                  .uploadResult ul li img {
+                    width: 100px;
+                  }
+                </style>
+
+                <div class="uploadResult">
+                  <ul>
+
+                  </ul>
+                </div>
+                <div class="col-12">
+                  <input
+                    type="submit"
+                    value="등록 하기"
+                    class="btn btn-primary"
+                  />
+                </div>
+
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.untree_co-section -->
+
+    <script>
+      $(document).ready(function(e) {
+
+        var regex = new RegExp("(.*?)\.(exe|sh|zip|alz|tiff)$");
+        var maxSize = 10485760; //10MB
+
+        function checkExtension(fileName, fileSize){
+
+          if(fileSize >= maxSize){
+            alert("파일 사이즈 초과");
+            return false;
+          }
+
+          if(regex.test(fileName)){
+            alert("해당 종류의 파일은 업로드할 수 없습니다.");
+            return false;
+          }
+          return true;
+        }
+
+        $(".custom-file-input").on("change", function() {
+
+          var fileName = $(this).val().split("\\").pop();
+          $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+
+          var formData = new FormData();
+
+          var inputFile = $(this);
+
+          var files = inputFile[0].files;
+
+          var appended = false;
+
+          for (var i = 0; i < files.length; i++) {
+
+            if(!checkExtension(files[i].name, files[i].size) ){
+              return false;
+            }
+
+            console.log(files[i]);
+            formData.append("uploadFiles", files[i]);
+            appended = true;
+          }
+
+          //upload를 하지 않는다.
+          if (!appended) {return;}
+
+          for (var value of formData.values()) {
+            console.log(value);
+          }
+
+          //실제 업로드 부분
+          //upload ajax
+          $.ajax({
+            url: '/uploadAjax',
+            processData: false,
+            contentType: false,
+            data: formData,
+            type: 'POST',
+            dataType:'json',
+            success: function(result){
+              console.log(result);
+              showResult(result);
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+              console.log(textStatus);
+            }
+          }); //$.ajax
+        }); //end change event
+
+
+        function showResult(uploadResultArr){
+
+          var uploadUL = $(".uploadResult ul");
+
+          var str ="";
+
+          $(uploadResultArr).each(function(i, obj) {
+
+            str += "<li data-name='" + obj.fileName + "' data-path='"+obj.folderPath+"' data-uuid='"+obj.uuid+"'>";
+            str + " <div>";
+            str += "<button type='button' data-file=\'" + obj.imageURL + "\' "
+            str += "class='btn-warning btn-sm'>X</button><br>";
+            str += "<img src='/display?fileName=" + obj.thumbnailURL + "'>";
+            str += "</div>";
+            str + "</li>";
+          });
+
+          uploadUL.append(str);
+        }
+
+        $(".uploadResult ").on("click", "li button", function(e){
+
+          console.log("delete file");
+
+          var targetFile = $(this).data("file");
+
+          var targetLi = $(this).closest("li");
+
+          $.ajax({
+            url: '/removeFile',
+            data: {fileName: targetFile},
+            dataType:'text',
+            type: 'POST',
+            success: function(result){
+              alert(result);
+
+              targetLi.remove();
+            }
+          }); //$.ajax
+        });
+
+
+        //prevent submit
+        $(".btn-primary").on("click", function(e) {
+          e.preventDefault();
+
+          var str = "";
+
+          $(".uploadResult li").each(function(i,obj){
+            var target = $(obj);
+
+            str += "<input type='hidden' name='imageDTOList["+i+"].imgName' value='"+target.data('name') +"'>";
+
+            str += "<input type='hidden' name='imageDTOList["+i+"].path' value='"+target.data('path')+"'>";
+
+            str += "<input type='hidden' name='imageDTOList["+i+"].uuid' value='"+target.data('uuid')+"'>";
+
+          });
+
+          //태그들이 추가된 것을 확인한 후에 comment를 제거
+          $(".box").html(str);
+
+          $("form").submit();
+
+        });
+      }); //document ready
+    </script>
+    </th:block>
+    </th:block>

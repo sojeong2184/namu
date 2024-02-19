@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{layout_admin/header :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+
+        <div id="app">
+            <div id="main">
+
+                <h1 class="mt-4">Item Read Page</h1>
+                <form th:action="@{admin/item/remove}" th:method="post">
+                <div class="form-group">
+                    <label>Ino</label>
+                    <input type="text" class="form-control" name="ino" th:value="${dto.ino}" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Item Name</label>
+                    <input type="text" class="form-control" name="iname" th:value="${dto.iname}" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Item Price</label>
+                    <input type="text" class="form-control" name="iprice" th:value="${dto.iprice}" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Item Dealway</label>
+                    <input type="text" class="form-control" name="idealway" th:value="${dto.idealway}" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Item Location</label>
+                    <input type="text" class="form-control" name="ilocation" th:value="${dto.ilocation}" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Item Category</label>
+                    <input type="text" class="form-control" name="icategory" th:value="${dto.icategory}" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Item Condition</label>
+                    <input type="text" class="form-control" name="icondition" th:value="${dto.icondition}" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Item description</label>
+                    <textarea class="form-control" rows="5" name="idescription" readonly>[[${dto.idescription}]]</textarea>
+                </div>
+                <div class="form-group">
+                    <label>RegDate</label>
+                    <input type="text" class="form-control" name="regDate"
+                           th:value="${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
+                </div>
+                <div class="form-group">
+                    <label>ModDate</label>
+                    <input type="text" class="form-control" name="modDate"
+                           th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
+                </div>
+
+                <style>
+                    .uploadResult {
+                        width: 100%;
+                        background-color: gray;
+                        margin-top: 10px;
+                    }
+
+                    .uploadResult ul {
+                        display: flex;
+                        flex-flow: row;
+                        justify-content: center;
+                        align-items: center;
+                        vertical-align: top;
+                        overflow: auto;
+                    }
+
+                    .uploadResult ul li {
+                        list-style: none;
+                        padding: 10px;
+                        margin-left: 2em;
+                    }
+
+                    .uploadResult ul li img {
+                        width: 100px;
+                    }
+                </style>
+
+
+
+                <div class="uploadResult">
+                    <ul >
+                        <li th:each="itemImage: ${dto.imageDTOList}" th:data-file="${itemImage.getThumbnailURL()}">
+                            <img  th:if="${itemImage.path != null}" th:src="|/display?fileName=${itemImage.getThumbnailURL()}|">
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="imageModal modal " tabindex="-2" role="dialog">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Picture</h5>
+
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <a th:href="@{/admin/item/modify(ino = ${dto.ino}, page=${requestDTO.page}, type=${requestDTO.type}, keyword =${requestDTO.keyword})}">
+                    <button type="button" class="btn btn-primary">수정하기</button>
+                </a>
+
+                <a th:href="@{/admin/item/list(page=${requestDTO.page} , type=${requestDTO.type}, keyword =${requestDTO.keyword})}">
+                    <button type="button" class="btn btn-info">목록</button>
+                </a>
+                <button type="button" class="btn btn-danger removeBtn">삭제하기</button>
+                </form>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script th:inline="javascript">
+            $(document).ready(function() {
+                var actionForm = $("form"); // form 태그 객체
+
+                $(".removeBtn").click(function() {
+                    if (confirm("삭제하시겠습니까?")) {
+                        actionForm
+                            .attr("action", "/admin/item/remove")
+                            .attr("method", "post")
+                            .submit();
+                    }
+                });
+
+                $(".listBtn").click(function() {
+                    var page = $("input[name='page']");
+                    var type = $("input[name='type']");
+                    var keyword = $("input[name='keyword']");
+
+                    actionForm.empty(); // form 태그의 모든 내용을 지우고
+
+                    actionForm.append(page);
+                    actionForm.append(type);
+                    actionForm.append(keyword);
+
+                    actionForm
+                        .attr("action", "/admin/item/list")
+                        .attr("method", "get");
+
+                    actionForm.submit();});
+            });
+        </script>
+    </th:block>
+
+</th:block>

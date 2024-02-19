@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{layout/header :: setContent(~{this::content} )}">
+  <th:block th:fragment="content">
+    <div
+            class="hero page-inner overlay"
+            style="background-image: url('/images/hero_bg_1.jpg')"
+    >
+      <div class="container">
+        <div class="row justify-content-center align-items-center">
+          <div class="col-lg-9 text-center mt-5">
+            <h1 class="heading" data-aos="fade-up">공지사항</h1>
+
+            <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+              <ol class="breadcrumb text-center justify-content-center">
+                <li class="breadcrumb-item"><a th:href="@{/index}">Home</a></li>
+                <li class="breadcrumb-item active text-white-50" aria-current="page">공지사항</li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-heading">
+      <section class="section">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">[[${ndto.ntitle}]]</h4>
+            <div class="form-group">
+              <label ></label>
+              <input type="text" class="small-text-box" name="regDate" th:value="${#temporals.format(ndto.regDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
+              <style>
+                .small-text-box {
+                  font-size: 12px; /* 원하는 크기로 조절하세요 */
+                  border: none; /* 테두리 제거 */
+                  background-color: transparent; /* 배경 색상을 투명하게 설정 */
+                }
+              </style>
+            </div>
+          </div>
+          <div class="card-body"  style="white-space: pre-line;">
+            [[${ndto.ncontent}]]
+          </div>
+        </div>
+      </section>
+    </div>
+  </th:block>
+</th:block>

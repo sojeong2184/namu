@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="setContent(content)">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard - Mazer Admin Dashboard</title>
+
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap"
+              rel="stylesheet">
+        <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+        <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
+              rel="stylesheet">
+
+        <!-- CSS -->
+        <!-- common -->
+        <link rel="stylesheet" th:href="@{/assets/css/bootstrap.css}">
+        <link rel="stylesheet" th:href="@{/assets/vendors/perfect-scrollbar/perfect-scrollbar.css}">
+        <link rel="stylesheet" th:href="@{/assets/vendors/bootstrap-icons/bootstrap-icons.css}">
+        <link rel="stylesheet" th:href="@{/assets/css/app.css}">
+        <link rel="shortcut icon" th:href="@{/assets/images/favicon.svg}" type="image/x-icon">
+
+        <!-- application-email -->
+        <link rel="stylesheet" th:href="@{/assets/css/pages/email.css}">
+        <!-- extra-component-rating -->
+        <link rel="stylesheet" th:href="@{/assets/vendors/rater-js/style.css}">
+        <!-- extra-component-sweetalert -->
+        <link rel="stylesheet" th:href="@{/assets/vendors/sweetalert2/sweetalert2.min.css}">
+        <!-- extra-component-toastify / ui-file-uploader -->
+        <link rel="stylesheet" th:href="@{/assets/vendors/toastify/toastify.css}">
+        <!-- form-editor-quill -->
+        <link rel="stylesheet" th:href="@{/assets/vendors/quill/quill.bubble.css}">
+        <link rel="stylesheet" th:href="@{/assets/vendors/quill/quill.snow.css}">
+        <!-- form-editor-summernote -->
+        <link rel="stylesheet" th:href="@{/assets/vendors/summernote/summernote-lite.min.css}">
+        <!-- index -->
+        <link rel="stylesheet" th:href="@{/assets/vendors/iconly/bold.css}">
+        <!-- ui-widgets-chatbox -->
+        <link rel="stylesheet" th:href="@{/assets/css/widgets/chat.css}">
+        <!-- ui-widgets-todolist -->
+        <link rel="stylesheet" th:href="@{/assets/vendors/dragula/dragula.min.css}">
+        <!-- ui-chart-chartjs -->
+        <link rel="stylesheet" th:href="@{/assets/vendors/chartjs/Chart.min.css}">
+        <!-- chatList -->
+        <link rel="stylesheet" th:href="@{/assets/css/pages/chatList.css}">
+    </head>
+    <body>
+
+    <div id="app">
+        <div id="sidebar" class="active">
+            <div class="sidebar-wrapper active">
+                <div class="sidebar-header">
+                    <div class="d-flex justify-content-between">
+                        <div class="logo">
+                            <a th:href="@{/admin/index}"><img th:src="@{/assets/images/logo/namuWidth.png}"
+                                                              alt="Logo" srcset="" ></a>
+                        </div>
+                        <div class="toggler">
+                            <a href="#" class="sidebar-hide d-xl-none d-block">
+                                <i class="bi bi-x bi-middle"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar-menu">
+                    <ul class="menu">
+                        <li class="sidebar-title">Menu</li>
+
+                        <li class="sidebar-item  ">
+                            <a th:href="@{/admin/index}" class='sidebar-link'>
+                                <i class="bi bi-house"></i>
+                                <span>Home(Admin)</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a th:href="@{/index}" class='sidebar-link'>
+                                <i class="bi bi-house-fill"></i>
+                                <span>Home(User)</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a th:href="@{/admin/notice/list}" class='sidebar-link'>
+                                <i class="bi bi-bell"></i>
+                                <span>공지사항 관리</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a th:href="@{/admin/event/list}" class='sidebar-link'>
+                                <i class="bi bi-puzzle"></i>
+                                <span>이벤트 관리</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a th:href="@{/admin/item/list}" class='sidebar-link'>
+                                <i class="bi bi-box-seam"></i>
+                                <span>중고물품 관리</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a th:href="@{/admin/answer/list}" class='sidebar-link'>
+                                <i class="bi bi-clipboard-check"></i>
+                                <span>질문 관리</span>
+                            </a>
+                        </li>
+
+<!--                        <li class="sidebar-item  ">-->
+<!--                            <a th:href="@{/admin/order/list}" class='sidebar-link'>-->
+<!--                                <i class="bi bi-basket3"></i>-->
+<!--                                <span>결제 관리</span>-->
+<!--                            </a>-->
+<!--                        </li>-->
+
+                        <li class="sidebar-item  ">
+                            <a th:href="@{/chat/chatList}" class='sidebar-link'>
+                                <i class="bi bi-chat-dots"></i>
+                                <span>채팅</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-stack"></i>
+                                <span>Components</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a th:href="@{/component/component-alert}">Alert</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/component/component-badge}">Badge</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/component/component-breadcrumb}">Breadcrumb(경로)</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/component/component-button}">Button</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/component/component-card}">Card</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/component/component-carousel}">Carousel</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/component/component-dropdown}">Dropdown</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/component/component-list-group}">List Group</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/component/component-modal}">Modal</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/component/component-navs}">Navs</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/component/component-pagination}">Pagination</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/component/component-progress}">Progress</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/component/component-spinner}">Spinner</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/component/component-tooltip}">Tooltip</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-collection-fill"></i>
+                                <span>Extra Components</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/extra-component-avatar}">Avatar</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/extra-component-sweetalert}">Sweet Alert</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/extra-component-toastify}">Toastify</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/extra-component-rating}">Rating</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/extra-component-divider}">Divider</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-grid-1x2-fill"></i>
+                                <span>Layouts</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/layout-default}">Default Layout</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/layout-vertical-1-column}">1 Column</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/layout-vertical-navbar}">Vertical with Navbar</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/layout-horizontal}">Horizontal Menu</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-title">Forms &amp; Tables</li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-hexagon-fill"></i>
+                                <span>Form Elements</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/form-element-input}">Input</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/form-element-input-group}">Input Group</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/form-element-select}">Select</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/form-element-radio}">Radio</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/form-element-checkbox}">Checkbox</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/form-element-textarea}">Textarea</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a th:href="@{/adminTemplate/form-layout}" class='sidebar-link'>
+                                <i class="bi bi-file-earmark-medical-fill"></i>
+                                <span>Form Layout</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-pen-fill"></i>
+                                <span>Form Editor</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/form-editor-quill}">Quill</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/form-editor-ckeditor}">CKEditor</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/form-editor-summernote}">Summernote</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/form-editor-tinymce}">TinyMCE</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a th:href="@{/adminTemplate/table}" class='sidebar-link'>
+                                <i class="bi bi-grid-1x2-fill"></i>
+                                <span>Table</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a th:href="@{/adminTemplate/table-datatable}" class='sidebar-link'>
+                                <i class="bi bi-file-earmark-spreadsheet-fill"></i>
+                                <span>Datatable</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-title">Extra UI</li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-pentagon-fill"></i>
+                                <span>Widgets</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/ui-widgets-chatbox}">Chatbox</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/ui-widgets-pricing}">Pricing</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/ui-widgets-todolist}">To-do List</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-egg-fill"></i>
+                                <span>Icons</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/ui-icons-bootstrap-icons}">Bootstrap Icons </a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/ui-icons-fontawesome}">Fontawesome</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/ui-icons-dripicons}">Dripicons</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-bar-chart-fill"></i>
+                                <span>Charts</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/ui-chart-chartjs}">ChartJS</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/ui-chart-apexcharts}">Apexcharts</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a th:href="@{/adminTemplate/ui-file-uploader}" class='sidebar-link'>
+                                <i class="bi bi-cloud-arrow-up-fill"></i>
+                                <span>File Uploader</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-map-fill"></i>
+                                <span>Maps</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/ui-map-google-map}">Google Map</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/ui-map-jsvectormap}">JS Vector Map</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-title">Pages</li>
+
+                        <li class="sidebar-item">
+                            <a th:href="@{/adminTemplate/application-email}" class='sidebar-link'>
+                                <i class="bi bi-envelope-fill"></i>
+                                <span>Email Application</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a th:href="@{/adminTemplate/application-chat}" class='sidebar-link'>
+                                <i class="bi bi-chat-dots-fill"></i>
+                                <span>Chat Application</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a th:href="@{/adminTemplate/application-gallery}" class='sidebar-link'>
+                                <i class="bi bi-image-fill"></i>
+                                <span>Photo Gallery</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a th:href="@{/adminTemplate/application-checkout}" class='sidebar-link'>
+                                <i class="bi bi-basket-fill"></i>
+                                <span>Checkout Page</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-person-badge-fill"></i>
+                                <span>Authentication</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a th:href="@{/member/login}">Login</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/member/register}">Register</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/adminTemplate/auth-forgot-password}">Forgot Password</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-x-octagon-fill"></i>
+                                <span>Errors</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a th:href="@{/error/error-403}">403</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/error/error-404}">404</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a th:href="@{/error/error-500}">500</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-title">Raise Support</li>
+
+                        <li class="sidebar-item  ">
+                            <a href="https://zuramai.github.io/mazer/docs" class='sidebar-link'>
+                                <i class="bi bi-life-preserver"></i>
+                                <span>Documentation</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a href="https://github.com/zuramai/mazer/blob/main/CONTRIBUTING.md"
+                               class='sidebar-link'>
+                                <i class="bi bi-puzzle"></i>
+                                <span>Contribute</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a href="https://github.com/zuramai/mazer#donate" class='sidebar-link'>
+                                <i class="bi bi-cash"></i>
+                                <span>Donate</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+                <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+            </div>
+        </div>
+
+        <th:block th:replace="${content}"></th:block>
+
+        <div id="main">
+            <footer>
+                <div class="footer clearfix mb-0 text-muted">
+                    <div class="float-start">
+                        <p>2021 &copy; Mazer</p>
+                    </div>
+                    <div class="float-end">
+                        <p>Crafted with <span class="text-danger"><i class="bi bi-heart"></i></span> by <a
+                                href="http://ahmadsaugi.com">A. Saugi</a></p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- SCRIPT(body안에 넣어야함) -->
+    <!-- common -->
+    <script th:src="@{/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+    <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+    <!-- header 반응 -->
+    <script th:src="@{/assets/js/main.js}"></script>
+
+    <!-- extra-component-sweetalert : rating과 같이 두면 BasicExample에 별이 들어감-->
+    <script th:src="@{/assets/js/extensions/sweetalert2.js}"></script>
+    <script th:src="@{/assets/vendors/sweetalert2/sweetalert2.all.min.js}"></script>
+    <!-- extra-component-toastify -->
+    <script th:src="@{/assets/vendors/toastify/toastify.js}"></script>
+    <script th:src="@{/assets/js/extensions/toastify.js}"></script>
+    <!-- form-editor-quill-->
+    <script th:src="@{/assets/vendors/quill/quill.min.js}"></script>
+    <script th:src="@{/assets/js/pages/form-editor.js}"></script>
+    </body>
+</th:block>
+</html>

@@ -1,0 +1,104 @@
+<th:block th:replace="~{layout/header :: setContent(~{this::content} )}">
+
+  <th:block th:fragment="content">
+
+    <div class="hero page-inner overlay" style="background-image: url('/images/hero_bg_1.jpg')">
+      <div class="container">
+        <div class="row justify-content-center align-items-center">
+          <div class="col-lg-9 text-center mt-5">
+            <h1 class="heading" data-aos="fade-up">상품</h1>
+            <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+              <ol class="breadcrumb text-center justify-content-center">
+                <li class="breadcrumb-item"><a th:href="@{/index}">메인</a></li>
+                <li class="breadcrumb-item active text-white-50" aria-current="page">상품</li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <form th:action="@{/search}" th:method="get">
+      <div class="input-group">
+        <input class="form-control" name="iname" type="text">
+        <button type="submit" class="btn btn-primary btn-search">검색하기</button>
+      </div>
+    </form>
+
+    <div class="section section-properties">
+      <div class="container">
+        <div class="row" >
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4" th:each="dto : ${result.dtoList}">
+            <div class="property-item mb-30">
+              <a th:href="@{/article(ino = ${dto.ino})}" class="img">
+                <img th:if="${dto.imageDTOList.size() > 0 && dto.imageDTOList[0].path != null}"
+                     th:src="|/display?fileName=${dto.imageDTOList[0].getThumbnailURL()}|" alt="Image" class="img-fluid" />
+              </a>
+
+              <div class="property-content">
+                <div class="price mb-2"><span>[[${dto.iprice}]] 원</span></div>
+                <div>
+                  <span class="d-block mb-2 text-black-50">[[${dto.ilocation}]]</span>
+                  <span class="city d-block mb-3">[[${dto.iname}]]</span>
+
+                  <div class="specs d-flex mb-4">
+                    <span class="d-block d-flex align-items-center me-3" onclick="redirectToPage('/mypage/likeList')">
+                        <span class="bi bi-heart me-2"></span>
+                        <span class="caption">1</span>
+                    </span>
+                                    <span class="d-block d-flex align-items-center" onclick="redirectToChatList()">
+                        <span class="bi bi-chat-fill me-2"></span>
+                        <span class="caption">2</span>
+                    </span>
+                  </div>
+
+                  <script>
+                    function redirectToChatList() {
+                      // JavaScript를 사용하여 페이지 이동
+                      window.location.href = '/mypage/chat/chatList';
+                    }
+
+                    function redirectToPage(pageUrl) {
+                      // JavaScript를 사용하여 페이지 이동
+                      window.location.href = pageUrl;
+                    }
+                  </script>
+
+                  <a
+                          th:href="@{/article(ino = ${dto.ino})}"
+                    class="btn btn-primary py-2 px-3"
+                    >더보기</a
+                  >
+                </div>
+              </div>
+            </div>
+            <!-- .item -->
+          </div>
+          <ul class="pagination h-100 justify-content-center align-items-center">
+
+            <li class="page-item " th:if="${result.prev}">
+              <a class="page-link"
+                 th:href="@{/properties(page= ${result.start -1}, type=${pageRequestDTO.type}, keyword = ${pageRequestDTO.keyword} ) }"
+                 tabindex="-1">Previous</a>
+            </li>
+
+            <li th:class=" 'page-item ' + ${result.page == page?'active':''} "
+                th:each="page: ${result.pageList}">
+              <a class="page-link"
+                 th:href="@{/properties(page = ${page}, type=${pageRequestDTO.type}, keyword = ${pageRequestDTO.keyword})}">
+                [[${page}]]
+              </a>
+            </li>
+
+            <li class="page-item" th:if="${result.next}">
+              <a class="page-link"
+                 th:href="@{/properties(page= ${result.end + 1}, type=${pageRequestDTO.type}, keyword = ${pageRequestDTO.keyword} )}">Next</a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    </th:block>
+    </th:block>

@@ -1,0 +1,56 @@
+<div th:fragment="sidebar">
+
+    <!-- Sidebar content goes here -->
+
+
+            <div class="address mt-2">
+                <!--<i class="icon-room"></i>-->
+                <h4 class="mb-2">My Page</h4>
+                </br>
+            </div>
+            <div class="address mt-2">
+                <!--<i class="icon-room"></i>-->
+                <h4 class="mb-2">
+                    <a th:href="@{/mypage/myinfo/info}">내 정보</a></h4>
+            </div>
+            <div class="open-hours mt-4">
+                <!--<i class="icon-clock-o"></i>-->
+                <h4 class="mb-2">
+                    <a th:href="@{/mypage/chat/chatList}">채팅</a></h4>
+            </div>
+            <div class="email mt-4">
+                <!--<i class="icon-envelope"></i>-->
+                <h4 class="mb-2">
+                    <a th:href="@{/mypage/orderList}">나의 구매내역</a>
+                </h4>
+            </div>
+            <div class="email mt-4">
+                <!--<i class="icon-envelope"></i>-->
+                <h4 class="mb-2">
+                    <a th:href="@{/mypage/itemList}">나의 판매내역</a>
+                </h4>
+            </div>
+            <div class="email mt-4">
+                <!--<i class="icon-envelope"></i>-->
+                <h4 class="mb-2">
+                    <a th:href="@{/mypage/questionList}">나의 질문내역</a>
+                </h4>
+            </div>
+            <div class="phone mt-4">
+                <!--<i class="icon-phone"></i>-->
+                <h4 class="mb-2">
+                    <a th:href="@{/mypage/heart}">나의 찜</a></h4>
+            </div>
+            <div class="phone mt-4">
+                <!--<i class="icon-phone"></i>-->
+                <h4 class="mb-2">
+                    <a th:href="@{/item/register}">상품등록</a></h4>
+            </div>
+            <div class="phone mt-4">
+                <!--<i class="icon-phone"></i>-->
+                <h4 class="mb-2">
+                    <a th:href="@{/mypage/shipping/list}">배송지관리</a></h4>
+            </div>
+        </div>
+    </div>
+</div>

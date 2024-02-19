@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
+<!--레이아웃용-->
+<head>
+    <title>질문 등록</title>
+</head>
+<div layout:fragment="content">
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    질문 등록
+                </div>
+                <div class="card-body">
+                    <form action="/question/register" method="post"> <!--form을 이용한 입력가능 부분구현-->
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">제목</span>
+                            <input type="text" name="qtitle" class="form-control" placeholder="제목을 입력하세요">
+                        </div>
+                        <div class="input-group mb-3">
+                            <label for="qcate">카테고리 선택:</label>
+                            <select id="qcate" name="qcate">
+                                <option value="option1">배송</option>
+                                <option value="option1">포인트</option>
+                                <option value="option2">신고</option>
+                                <option value="option3">기타</option>
+                                <!-- 다른 카테고리 옵션들을 추가할 수 있습니다 -->
+                            </select>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">내용</span>
+                            <textarea class="form-control col-sm-5" rows="5" name="qcontent"></textarea>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">작성자</span>
+                            <input type="text" name="member" class="form-control" placeholder="작성자"
+                                   th:value="${#authentication.principal.username}" readonly>
+                            <div class="col-sm-6 mb-1">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">비밀글</span>
+                                    <input class="form-check-input" type="checkbox" value="true" name="secret"
+                                           aria-label="Checkbox for following text input">
+                                </div>
+                                <input type="text" class="form-control" name="password" aria-label="Text input with checkbox">
+                            </div>
+                        </div>
+                        <div class="my-4">
+                            <div class="float-end">
+                                <button type="submit" class="btn btn-success">등록</button>
+                                <!--<button type="reset" class="btn btn-outline-success">Reset</button>-->
+                            </div>
+                        </div>
+                    </form>
+
+                </div><!--end card body-->
+            </div><!--end card-->
+        </div><!--end col-->
+    </div><!--end row-->
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+
+    const auth = [[${#authentication}]]
+
+    //@Valid를 통한 검증에 실패시 앞의 화면으로 이동
+    //이떄 addFlashAttribute()를 통해 'error'라는 이름으로 에러메세지 전송(js로처리)
+    const errors = [[${errors}]]
+    console.log(errors)
+
+    let errorMsg = ''
+
+    if (errors) {
+        for (let i = 0; i < errors.length; i++) {
+            errorMsg += `${errors[i].field}은(는) ${errors[i].code} \n`
+        }
+        alert(errorMsg)
+    }
+</script>
+
+</html>

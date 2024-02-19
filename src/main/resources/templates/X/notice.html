@@ -1,0 +1,62 @@
+<th:block th:replace="~{layout/header :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+
+        <div
+                class="hero page-inner overlay"
+                style="background-image: url('images/hero_bg_1.jpg')"
+        >
+            <div class="container">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-lg-9 text-center mt-5">
+                        <h1 class="heading" data-aos="fade-up">공지사항</h1>
+
+                        <nav
+                                aria-label="breadcrumb"
+                                data-aos="fade-up"
+                                data-aos-delay="200"
+                        >
+                            <ol class="breadcrumb text-center justify-content-center">
+                                <li class="breadcrumb-item"><a th:href="@{/index}">Home</a></li>
+                                <li
+                                        class="breadcrumb-item active text-white-50"
+                                        aria-current="page"
+                                >
+                                    공지사항
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="300" th:each="dto : ${nresult.dtoList}">
+                        <div class="box-feature mb-4">
+                            <span class="flaticon-house mb-4 d-block"></span>
+                            <h3 class="text-black mb-3 font-weight-bold">
+                                [[${dto.ntitle}]]
+                            </h3>
+
+                            <p class="text-black-50">
+                                [[${dto.ncontent}]]
+                            </p>
+
+                            <!-- 추가: ndto.regDate 표시 -->
+                            <p class="text-black-50">
+                                [[${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm:ss')}]]
+                            </p>
+
+                            <p><a th:href="@{/noticeread(nno=${dto.nno})}" class="learn-more">Read more</a></p>
+                        </div>
+                    </div>
+                    <!-- ... (이하 생략) -->
+                </div>
+            </div>
+        </div>
+
+    </th:block>
+</th:block>

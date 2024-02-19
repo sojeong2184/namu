@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{layout_admin/header :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+        <div id="app">
+            <div id="main">
+                <h1 class="mt-4">나무 이벤트 페이지</h1>
+
+                <form th:action="@{admin/event/remove}" th:method="post">
+                    <div class="form-group">
+
+                        <div class="form-group">
+                            <label >번호</label>
+                            <input type="text" class="form-control" name="eno" th:value="${edto.eno}" readonly >
+                        </div>
+
+                        <label >제목</label>
+                        <input type="text" class="form-control" name="etitle" th:value="${edto.etitle}"  readonly>
+                    </div>
+                    <div class="form-group">
+                        <label >내용</label>
+                        <textarea class="form-control" rows="10" name="econtent" readonly>[[${edto.econtent}]]</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label >RegDate</label>
+                        <input type="text" class="form-control" name="regDate" th:value="${#temporals.format(edto.regDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label >ModDate</label>
+                        <input type="text" class="form-control" name="modDate" th:value="${#temporals.format(edto.modDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
+                    </div>
+
+
+                    <style>
+                        .uploadResult {
+                            width: 100%;
+                            background-color: gray;
+                            margin-top: 10px;
+                        }
+
+                        .uploadResult ul {
+                            display: flex;
+                            flex-flow: row;
+                            justify-content: center;
+                            align-items: center;
+                            vertical-align: top;
+                            overflow: auto;
+                        }
+
+                        .uploadResult ul li {
+                            list-style: none;
+                            padding: 10px;
+                            margin-left: 2em;
+                        }
+
+                        .uploadResult ul li img {
+                            width: 100px;
+                        }
+                    </style>
+
+
+
+                    <div class="uploadResult">
+                        <ul >
+                            <li th:each="eventImage: ${edto.imageDTOList}" th:data-file="${eventImage.getThumbnailURL()}">
+                                <img  th:if="${eventImage.path != null}" th:src="|/display?fileName=${eventImage.getThumbnailURL()}|">
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="imageModal modal " tabindex="-2" role="dialog">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Picture</h5>
+
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a th:href="@{/admin/event/modify(eno = ${edto.eno}, page=${requestDTO.page}, type=${requestDTO.type}, keyword =${requestDTO.keyword})}">
+                        <button type="button" class="btn btn-primary">수정하기</button>
+                    </a>
+
+                    <a th:href="@{/admin/event/list(page=${requestDTO.page} , type=${requestDTO.type}, keyword =${requestDTO.keyword})}">
+                        <button type="button" class="btn btn-info">목록</button>
+                    </a>
+
+                    <button type="button" class="btn btn-danger removeBtn">삭제하기</button>
+
+
+                </form>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script th:inline="javascript">
+            $(document).ready(function() {
+                var actionForm = $("form"); // form 태그 객체
+
+                $(".removeBtn").click(function() {
+                    if (confirm("삭제하시겠습니까?")) {
+                        actionForm
+                            .attr("action", "/admin/event/remove")
+                            .attr("method", "post")
+                            .submit();
+                    }
+                });
+
+                $(".listBtn").click(function() {
+                    var page = $("input[name='page']");
+                    var type = $("input[name='type']");
+                    var keyword = $("input[name='keyword']");
+
+                    actionForm.empty(); // form 태그의 모든 내용을 지우고
+
+                    actionForm.append(page);
+                    actionForm.append(type);
+                    actionForm.append(keyword);
+
+                    actionForm
+                        .attr("action", "/admin/event/list")
+                        .attr("method", "get");
+
+                    actionForm.submit();});
+            });
+        </script>
+
+
+
+        <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
+
+
+
+    </th:block>
+
+</th:block>

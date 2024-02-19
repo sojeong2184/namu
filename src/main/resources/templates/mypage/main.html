@@ -1,0 +1,63 @@
+<th:block th:replace="~{layout/header :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+        <div class="hero page-inner overlay" style="background-image: url('/images/hero_bg_1.jpg')">
+            <div class="container">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-lg-9 text-center mt-5">
+                        <h1 class="heading" data-aos="fade-up">About</h1>
+
+                        <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+                            <ol class="breadcrumb text-center justify-content-center">
+                                <li class="breadcrumb-item"><a th:href="@{/index}">Home</a></li>
+                                <li class="breadcrumb-item active text-white-50" aria-current="page">MyPage
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-heading">
+            <div class="section"></div>
+            <div class="section pt-0">
+                <div class="container">
+                    <div class="row justify-content-cneter mb-5 ms-4">
+
+                        <!-- sidebar-->
+                        <div class="col-lg-3" data-aos="fade-up" data-aos-delay="100">
+                            <div class="contact-info">
+                                <div th:include="layout/mypageSidebar :: sidebar"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
+                            <form action="#">
+                                <div class="row">
+                                    <div class="col-6 mb-3">
+                                        <input type="text" class="form-control" placeholder="Your Name"/>
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <input type="email" class="form-control" placeholder="Your Email"/>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <input type="text" class="form-control" placeholder="Subject"/>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <textarea name="" id="" cols="30" rows="7" class="form-control"
+                                                  placeholder="Message"></textarea>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <input type="submit" value="Send Message" class="btn btn-primary"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</th:block>
