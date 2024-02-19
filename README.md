@@ -5,6 +5,8 @@
 <img src="https://github.com/sojeong2184/namu/raw/NaMu/_screenshots/login.png" width="400" style="max-width: 100%;"></a>
 <a href="https://github.com/sojeong2184/namu/blob/NaMu/_screenshots/회원가입.png" class="">
 <img src="https://github.com/sojeong2184/namu/raw/NaMu/_screenshots/회원가입.png" width="400" style="max-width: 100%;"></a>
+  <a href="https://github.com/sojeong2184/namu/blob/NaMu/_screenshots/비밀번호찾기.png" class="">
+<img src="https://github.com/sojeong2184/namu/raw/NaMu/_screenshots/비밀번호찾기.png" width="400" style="max-width: 100%;"></a>
 </p>
 <hr>
 </hr>
